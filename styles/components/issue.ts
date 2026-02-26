@@ -741,6 +741,10 @@ export const issueSidebar = css`
               }
             }
           }
+          // 修复菜单下拉打开时, 无法聚焦输入框
+          .menu input {
+            transition: none;
+          }
         }
         // 时间追踪
         > div:not([class]):not([id]) {
@@ -807,6 +811,7 @@ export const issueSidebar = css`
             }
           }
         }
+        // 修复
       }
     }
   }
