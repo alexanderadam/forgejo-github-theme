@@ -811,7 +811,6 @@ export const issueSidebar = css`
             }
           }
         }
-        // 修复
       }
     }
   }
