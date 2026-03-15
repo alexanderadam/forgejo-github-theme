@@ -35,7 +35,12 @@ export const transition = css`
   .ui.selection.active.dropdown .menu,
   .ui.selection.active.dropdown:hover .menu,
   .ui.vertical.menu .header.item,
-  .ui.secondary.menu .item {
+  .ui.secondary.menu .item,
+  // buttons should have smooth transitions
+  .ui.button,
+  .ui.basic.button,
+  .ui.labeled.button > .label,
+  a.ui.label {
     transition: 80ms cubic-bezier(0.33, 1, 0.68, 1);
   }
   // Gitea 表单元素原始过渡覆盖

@@ -3,12 +3,13 @@ import { css, themeVars } from "src/types/vars";
 export const footer = css`
   .page-footer {
     background-color: ${themeVars.color.body};
-    border-top: 0;
+    border-top: 1px solid ${themeVars.color.light.border};
     color: ${themeVars.color.text.light.num1};
     font-size: 12px;
-    gap: 32px;
+    gap: 24px;
     justify-content: center;
-    padding: 16px 0 40px 0;
+    padding: 24px 16px 24px 16px;
+    margin-top: 32px;
     > .left-links {
       gap: 4px;
       > a {

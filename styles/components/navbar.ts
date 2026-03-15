@@ -3,23 +3,27 @@ import { css, customThemeVars, otherThemeVars, themeVars } from "src/types/vars"
 
 export const navbarRight = css`
   #navbar {
-    padding: 8px 16px; // 上下内边距 + .navbar-left & .navbar-right 的 min-height = 64px
-    min-height: 64px;
+    padding: 6px 16px;
+    min-height: 62px;
+    // sticky header like GitHub
+    position: sticky;
+    top: 0;
+    z-index: 100;
     .navbar-left,
     .navbar-right {
       min-height: 48px;
     }
     .navbar-left {
-      gap: 8px;
+      gap: 6px;
       > .item {
         padding: 4px 8px;
         min-height: 20px;
+        font-size: 14px;
         &.active {
           font-weight: 600;
         }
         &#navbar-logo {
-          // 与下方的用户切换头像对齐
-          padding-left: 6px;
+          padding-left: 4px;
           &:hover {
             background: unset;
           }
@@ -28,6 +32,16 @@ export const navbarRight = css`
             width: 32px;
           }
         }
+      }
+    }
+    // Sign-in link styling (when not logged in)
+    .navbar-right > a.item:not(.ui):not(:has(.user-menu)) {
+      font-weight: 500;
+      font-size: 14px;
+      padding: 5px 16px;
+      border-radius: ${otherThemeVars.border.radius};
+      &:hover {
+        background-color: ${themeVars.color.nav.hoverBg};
       }
     }
     // 进入用户页面后, 避免注册, 登录和首页等意外覆盖
