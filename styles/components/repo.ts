@@ -1,18 +1,27 @@
 import { css, otherThemeVars, themeVars } from "src/types/vars";
 
-// 仓库头信息
+// repo header info
 export const repoHeader = css`
   .page-content.repository .repo-header {
-    // 点星/关注/克隆/RSS 按钮
+    // Watch/Star/Fork buttons
     .ui.compact.button {
       padding: 3px 12px;
+      font-size: 12px;
     }
-    // 仓库名称
+    // counter badges on Watch/Star/Fork
+    .ui.labeled.button > .ui.label {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      min-width: 28px;
+      text-align: center;
+    }
+    // repo name
     .flex-item {
       .flex-item-title {
-        // 间隔线颜色
+        // separator color
         color: ${themeVars.color.text.light.num1};
-        // 仓库名称
+        // repo name links
         a {
           display: flex;
           align-items: center;
@@ -32,10 +41,15 @@ export const repoHeader = css`
           }
         }
       }
-      // 默认的 hover 为 primary 颜色, 修正
       a:not(.label, .button):hover {
         color: ${themeVars.color.text.self} !important;
       }
+    }
+    // mirror URL - hide sensitive tokens in display
+    .flex-item-body a[href*="x-access-token"],
+    .flex-item-body a[href*="oauth2:"] {
+      word-break: break-all;
+      font-size: 12px;
     }
   }
 `;

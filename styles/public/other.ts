@@ -9,17 +9,36 @@ export const listHeader = css`
 `;
 
 export const svg = css`
-  // 已标星的图标
+  // starred icon
   .octicon-star-fill {
     color: ${themeVars.github.button.star.iconColor} !important;
   }
-  // VSCode 图标
+  // VSCode icon
   .gitea-vscode {
     color: #007acc !important;
   }
-  // VSCodium 图标
+  // VSCodium icon
   .gitea-vscodium {
     color: #429cf0 !important;
+  }
+  // icon size consistency (16px default, matching GitHub)
+  .svg {
+    width: 16px;
+    height: 16px;
+    &.octicon-16 {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  // nav icons slightly larger
+  #navbar .svg {
+    width: 16px;
+    height: 16px;
+  }
+  // loading spinner style
+  .is-loading::after {
+    border-color: ${themeVars.color.primary.self};
+    border-right-color: transparent;
   }
 `;
 

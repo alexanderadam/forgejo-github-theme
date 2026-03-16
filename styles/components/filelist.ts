@@ -30,9 +30,21 @@ export const syncFork = css`
   }
 `;
 
-// 仓库文件列表
+// repo code search bar - make less prominent (GitHub doesn't have this)
+export const codeSearch = css`
+  .repository.file.list .repo-search-form {
+    margin-bottom: 8px;
+    input[type="search"] {
+      font-size: 12px;
+      padding: 4px 8px;
+      height: 28px;
+    }
+  }
+`;
+
+// repo file list
 export const repoFiles = css`
-  // 文件列表和提交列表的按钮组
+  // file list button row
   .repo-button-row {
     margin: 16px 0;
   }
@@ -80,7 +92,7 @@ export const repoFiles = css`
           }
         }
       }
-      // 文件列表
+      // file list
       .repo-file-item {
         .repo-file-cell {
           height: 40px;
@@ -89,9 +101,26 @@ export const repoFiles = css`
             align-items: center;
             gap: 0.5rem;
             padding-left: 16px;
+            // folder icon color (blue tint like GitHub)
+            .svg.octicon-file-directory-fill {
+              color: ${themeVars.github.fgColor.accent};
+            }
           }
+          // commit message column: muted, truncated
+          &.message {
+            color: ${themeVars.color.text.light.num1};
+            a {
+              color: ${themeVars.color.text.light.num1};
+              &:hover {
+                color: ${themeVars.github.fgColor.accent};
+              }
+            }
+          }
+          // date column: muted
           &.age {
             padding-right: 16px;
+            color: ${themeVars.color.text.light.num1};
+            white-space: nowrap;
           }
         }
       }
