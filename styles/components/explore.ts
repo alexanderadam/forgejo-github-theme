@@ -51,15 +51,26 @@ export const repoList = css`
               }
             }
           }
-          // 描述和更新时间
+          // description and update time
           > .flex-item-body {
             margin-top: 8px;
-            // 更新时间
+            // description truncation (max 3 lines)
+            &:not(:last-child) {
+              display: -webkit-box;
+              -webkit-line-clamp: 3;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+              color: ${themeVars.color.text.light.num1};
+              font-size: 13px;
+              line-height: 1.5;
+            }
+            // update time
             &:last-child {
               font-size: 12px;
+              color: ${themeVars.color.text.light.num1};
             }
           }
-          // 主题标签
+          // topic labels
           > .label-list {
             margin-top: 8px;
           }
@@ -136,24 +147,53 @@ export const userList = css`
   }
 `;
 
-// 手机下的仓库和用户列表
+// mobile repo and user list
 export const mobileList = css`
   @media (max-width: 767.98px) {
-    // 组织的仓库列表
+    // all repo/user grids collapse to single column on mobile
     .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
-    // 用户的仓库列表
     .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
-    // 探索的仓库列表
     .page-content.explore.repositories > .ui.container,
-    // 组织的成员列表
-    .page-content.organization.members >.ui.container,
-    // 探索的用户和组织列表
-    .page-content.explore.users >.ui.container {
-      // 排除用户的公开活动页
+    .page-content.organization.members > .ui.container,
+    .page-content.explore.users > .ui.container {
       > .flex-list:not(#activity-feed) {
         grid-template-columns: 1fr;
         gap: 8px;
       }
+    }
+    // hide commit message column on mobile in file list
+    #repo-files-table .repo-file-cell.message {
+      display: none;
+    }
+    // tab navigation scrollable on small screens
+    .header-wrapper .ui.tabular.menu {
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .item {
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+    }
+    // repo header buttons stack on mobile
+    .repo-header .flex-item-trailing {
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+  }
+  // tablet breakpoint
+  @media (max-width: 1023.98px) {
+    // file list: reduce commit message width
+    #repo-files-table .repo-file-cell.message {
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 `;

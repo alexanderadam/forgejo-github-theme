@@ -103,14 +103,34 @@ export const issueList = css`
           gap: 4px;
           .flex-item-header {
             padding-top: 8px;
+            // issue title font weight like GitHub
+            .flex-item-title a {
+              font-weight: 600;
+              font-size: 16px;
+              &:hover {
+                color: ${themeVars.github.fgColor.accent};
+              }
+            }
           }
           .flex-item-body {
             font-size: 12px;
             padding-bottom: 8px;
+            color: ${themeVars.color.text.light.num1};
           }
         }
         > .flex-item-trailing {
           margin-right: 32px;
+          // comment count alignment
+          .flex-text-inline {
+            gap: 4px;
+            align-items: center;
+            color: ${themeVars.color.text.light.num1};
+            font-size: 12px;
+            font-weight: 600;
+            &:hover {
+              color: ${themeVars.github.fgColor.accent};
+            }
+          }
         }
       }
     }
