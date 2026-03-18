@@ -1,40 +1,69 @@
 import { css, otherThemeVars, themeVars } from "src/types/vars";
 import { activeItemAfterStyle } from "styles/public/menu";
 
-// fix issue opened icon should be green
+// issue opened icon green
 export const issueIconColor = css`
-  .svg.octicon-issue-opened.text.green {
+  .svg.octicon-issue-opened.text.green,
+  .flex-item-icon .svg.octicon-issue-opened {
     color: ${themeVars.github.fgColor.success} !important;
   }
 `;
 
-// issue filters bar styling
+// issue filters bar
 export const issueFilters = css`
   .page-content.repository.issue-list {
-    // issue checkbox not too far left
+    // checkbox
     .issue-list-toolbar .issue-list-toolbar-left input {
       margin-left: 16px !important;
     }
     // "New issue" button
-    .issue-navbar .ui.primary.button,
-    .issue-navbar a.ui.button.primary {
+    a.issue-list-new {
       background-color: ${themeVars.github.bgColor.success.emphasis} !important;
       border-color: ${themeVars.github.bgColor.success.emphasis} !important;
       color: ${themeVars.color.white} !important;
+      border-radius: ${otherThemeVars.border.radius};
       height: 32px;
-      padding: 0 12px;
+      padding: 0 16px;
       font-size: 14px;
       font-weight: 500;
       &:hover {
         opacity: 0.9;
       }
     }
-    // Labels/Milestones button style
-    .issue-navbar .small-menu-items + .ui.button:not(.primary),
-    .issue-navbar .ui.button:not(.primary) {
+    // Labels/Milestones outline buttons
+    .issue-list-navbar .item {
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: ${otherThemeVars.border.radius};
       height: 32px;
       padding: 0 12px;
       font-size: 14px;
+      font-weight: 500;
+      &:hover {
+        background: ${themeVars.github.control.transparent.bgColor.hover};
+      }
+    }
+    // search input fill available space
+    .issue-list-navbar .search {
+      flex: 1;
+    }
+    // merge filter bar with open/closed tabs into one visual row
+    .issue-list-toolbar {
+      padding: 8px 16px;
+      .issue-list-toolbar-left {
+        // Open/Closed/All tabs
+        > .ui.compact.menu {
+          > .item {
+            font-size: 14px;
+          }
+        }
+      }
+      .issue-list-toolbar-right {
+        > .ui.menu {
+          > .item {
+            font-size: 14px;
+          }
+        }
+      }
     }
   }
 `;
