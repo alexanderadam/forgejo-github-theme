@@ -9,15 +9,20 @@ export const heatmap = css`
     .total-contributions {
       left: 25px + 20px;
       bottom: 0 + 12px;
+      font-size: 16px;
     }
     .total-contributions,
     .vch__legend-right {
       color: ${themeVars.color.text.light.num1};
     }
     .vch__container {
-      padding: 12px 20px;
-      box-shadow: ${themeVars.github.shadow.floating.small};
-      border-radius: 12px;
+      padding: 8px 0px;
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: 6px 6px 0 0;
+      // month and day labels
+      text {
+        font-size: 12px;
+      }
       // 覆盖热力图和图例的背景色
       .vch__day__square,
       .vch__legend__wrapper rect {
@@ -73,27 +78,34 @@ export const activity = css`
     border-color: #0000;
   }
   .flex-list#activity-feed {
-    border-radius: 12px;
-    box-shadow: ${themeVars.github.shadow.floating.small};
+    border-radius: 6px;
+    border: 1px solid ${themeVars.color.light.border};
     > .flex-item {
       gap: 12px;
       padding: 16px;
       > .flex-item-leading {
         img {
-          width: 24px;
-          height: 24px;
+          width: 32px;
+          height: 32px;
           border-radius: 9999px;
+        }
+        // octicon badge style like github timeline
+        svg {
+          color: ${themeVars.color.text.light.num1};
         }
       }
       // 动态的主要内容
       > .flex-item-main {
         gap: 8px !important;
+        font-size: 14px;
         // 动态的标题
         > div:not([class]) {
           display: flex;
           align-items: baseline;
           gap: 6px;
           flex-wrap: wrap;
+          font-size: 14px;
+          color: ${themeVars.color.text.light.num1};
           > a {
             color: ${themeVars.color.text.self};
             // 不匹配作者
@@ -139,15 +151,23 @@ export const activity = css`
       // 动态的右侧 svg 图标
       .flex-item-trailing {
         align-self: center;
+        color: ${themeVars.color.text.light.num1};
         svg {
-          height: 18px;
-          width: 18px;
+          height: 16px;
+          width: 16px;
         }
       }
     }
     > .page.buttons {
-      border-top: 1px solid ${themeVars.color.secondary.self};
+      border-top: 1px solid ${themeVars.color.light.border};
       padding: 12px 0px;
     }
+  }
+  // gitea-unlock icon in feed - tone down the brightness
+  .flex-list#activity-feed .gitea-unlock,
+  .flex-list#activity-feed svg.gitea-unlock,
+  .flex-list#activity-feed .svg.gitea-unlock {
+    color: ${themeVars.color.text.light.num1} !important;
+    opacity: 0.6;
   }
 `;
