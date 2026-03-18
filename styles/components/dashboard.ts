@@ -8,11 +8,11 @@ export const dashboard = css`
     .ui.two.item.menu {
       background: ${themeVars.color.hover.self};
       border: 0;
-      border-radius: 12px;
+      border-radius: 6px;
       margin-bottom: 8px;
       > .item {
         background: unset;
-        border-radius: 12px;
+        border-radius: 6px;
         padding: 6px 12px !important;
         &.active {
           background: ${themeVars.color.menu};
@@ -46,11 +46,10 @@ export const dashboard = css`
     // 仓库/组织列表
     .ui.attached.segment {
       background-color: ${themeVars.color.menu};
-      border: unset !important;
-      box-shadow: ${themeVars.github.shadow.floating.small};
+      border: 1px solid ${themeVars.color.light.border} !important;
       &.repos-search {
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
         > .menu.repos-filter {
           .ui.circular.label {
             border-color: #00000000;
@@ -61,8 +60,8 @@ export const dashboard = css`
       }
       &.table {
         &:last-child {
-          border-bottom-left-radius: 12px !important;
-          border-bottom-right-radius: 12px !important;
+          border-bottom-left-radius: 6px !important;
+          border-bottom-right-radius: 6px !important;
         }
         ul {
           padding: 8px;
@@ -86,8 +85,8 @@ export const dashboard = css`
     }
     // 组织列表
     .ui.tab.dashboard-orgs .ui.attached.segment.table {
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
     }
   }
 `;
