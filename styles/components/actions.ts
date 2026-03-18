@@ -11,10 +11,10 @@ export const actions = css`
       &:before {
         content: "Actions";
         display: block;
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 600;
         margin-top: 6px;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
       }
     }
 
@@ -22,9 +22,9 @@ export const actions = css`
       &:before {
         content: "Workflow Runs";
         display: block;
-        font-size: 20px;
+        font-size: 16px;
         margin-top: 6px;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
         margin-left: 2px;
       }
       // 工作流列表标题栏菜单
@@ -164,9 +164,10 @@ export const actionViewHeader = css`
 // 工作流左侧作业列表
 export const actionViewLeft = css`
   .action-view-left.action-view-left.action-view-left {
-    margin-right: 28px;
+    margin-right: 16px;
     border-top: 1px solid ${themeVars.color.console.border};
-    max-width: 22vw;
+    max-width: 296px;
+    min-width: 200px;
     &:before {
       content: "Jobs";
       color: ${themeVars.color.console.fg.subtle};
@@ -240,8 +241,9 @@ export const actionViewRight = css`
     min-height: calc(100vh - 245px);
     // 作业详情页标题
     .job-info-header {
-      padding: 16px 12px 16px 24px !important;
-      height: 80px !important;
+      padding: 16px !important;
+      height: auto !important;
+      min-height: 68px;
       .job-info-header-left {
         .job-info-header-title {
           color: ${themeVars.github.fgColor.accent} !important;
@@ -270,12 +272,12 @@ export const actionViewRight = css`
         // 步骤标题, 双重确保覆盖原始样式
         .job-step-summary.job-step-summary {
           color: ${themeVars.color.console.fg.subtle};
-          padding: 8px !important;
-          height: 36px;
+          padding: 8px 12px !important;
+          height: 40px;
 
           &.selected {
-            // 滚动时固定在顶部的高度与 job-info-header 高度相同
-            top: 80px;
+            // sticky top aligns with job header
+            top: 68px;
           }
 
           &.step-expandable:hover {
