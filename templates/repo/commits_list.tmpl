@@ -80,3 +80,21 @@
 		{{end}}
 	</ul>
 </div>
+<script>
+// commit age coloring
+(function() {
+	var now = Date.now();
+	var day = 86400000;
+	document.querySelectorAll('.github-theme-commit').forEach(function(li) {
+		var rt = li.querySelector('relative-time');
+		if (!rt) return;
+		var dt = rt.getAttribute('datetime');
+		if (!dt) return;
+		var age = now - new Date(dt).getTime();
+		if (age < day) li.setAttribute('data-age', '0');
+		else if (age < 7 * day) li.setAttribute('data-age', '1');
+		else if (age < 30 * day) li.setAttribute('data-age', '2');
+		else li.setAttribute('data-age', '3');
+	});
+})();
+</script>

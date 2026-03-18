@@ -95,6 +95,21 @@ export const commitStatus = css`
   }
 `;
 
+// commit age coloring
+export const commitAge = css`
+  .github-theme-commit {
+    &[data-age="0"] {
+      border-left: 3px solid ${themeVars.github.fgColor.success};
+    }
+    &[data-age="1"] {
+      border-left: 3px solid ${themeVars.github.fgColor.accent};
+    }
+    &[data-age="2"] {
+      border-left: 3px solid ${themeVars.color.text.light.num1};
+    }
+  }
+`;
+
 // 提交图
 export const commitGraph = css`
   .page-content.repository #git-graph-container {
