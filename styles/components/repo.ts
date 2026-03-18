@@ -71,7 +71,14 @@ export const repoHeader = css`
   }
 `;
 
-// 顶部提交, 标签, 分支统计
+// hide summary bar on code page (GitHub doesn't have one)
+export const hideSummaryBar = css`
+  .page-content.repository.file.list > .ui.container > .repository-summary {
+    display: none;
+  }
+`;
+
+// 顶部提交, 标签, 分支统计 (other pages like commits still show it)
 export const repoMenu = css`
   .page-content.repository {
     .repository-summary .repository-menu {

@@ -15,15 +15,29 @@ export const commit = css`
           color: ${themeVars.color.text.light.num1};
         }
       }
-      // SHA 标签
-      .sha {
-        a.ui.label.commit-id-short {
-          padding: 2px 8px;
-          height: 28px;
-          margin-top: 0.375rem;
-          margin-bottom: 0.375rem;
-          margin-left: -8px;
-        }
+      // SHA plain text
+      td.sha a.sha.label {
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0;
+        height: auto;
+        margin: 0;
+      }
+      // compact rows
+      tr td {
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+      }
+      // action buttons hover only
+      td.tw-py-0 .btn.interact-bg,
+      td.text.right .btn.interact-bg {
+        opacity: 0;
+        transition: opacity 0.1s;
+      }
+      tr:hover td.tw-py-0 .btn.interact-bg,
+      tr:hover td.text.right .btn.interact-bg {
+        opacity: 1;
       }
       // 提交信息
       .message {
