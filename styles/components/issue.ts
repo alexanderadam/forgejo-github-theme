@@ -46,22 +46,18 @@ export const issueFilters = css`
     .issue-list-navbar .search {
       flex: 1;
     }
-    // merge filter bar with open/closed tabs into one visual row
+    // single-row filter bar
     .issue-list-toolbar {
       padding: 8px 16px;
+      flex-wrap: nowrap;
       .issue-list-toolbar-left {
-        // Open/Closed/All tabs
-        > .ui.compact.menu {
-          > .item {
-            font-size: 14px;
-          }
+        > .ui.compact.menu > .item {
+          font-size: 14px;
         }
       }
       .issue-list-toolbar-right {
-        > .ui.menu {
-          > .item {
-            font-size: 14px;
-          }
+        > .ui.menu > .item {
+          font-size: 14px;
         }
       }
     }
@@ -100,6 +96,10 @@ export const issueList = css`
             color: ${themeVars.color.text.light.num1};
             padding: 0px 8px;
             height: 30px;
+            // hide "All" tab
+            &:last-child:nth-child(3) {
+              display: none;
+            }
             &:before {
               display: none;
             }
@@ -167,10 +167,9 @@ export const issueList = css`
           }
         }
         > .flex-item-main {
-          gap: 4px;
+          gap: 2px;
           .flex-item-header {
             padding-top: 8px;
-            // issue title font weight like GitHub
             .flex-item-title a {
               font-weight: 600;
               font-size: 16px;

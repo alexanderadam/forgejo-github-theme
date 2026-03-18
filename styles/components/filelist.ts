@@ -89,7 +89,8 @@ export const repoFiles = css`
               }
             }
             // commit SHA hidden
-            .ui.label {
+            .ui.label,
+            a.sha.label {
               display: none;
             }
             // commit message weight
