@@ -30,14 +30,21 @@ export const syncFork = css`
   }
 `;
 
-// repo code search bar - make less prominent (GitHub doesn't have this)
+// hide code search bar on repo main page
 export const codeSearch = css`
   .repository.file.list .repo-search-form {
-    margin-bottom: 8px;
-    input[type="search"] {
-      font-size: 12px;
-      padding: 4px 8px;
-      height: 28px;
+    display: none;
+  }
+`;
+
+// HTTPS/SSH clone buttons - no green active state
+export const cloneButtons = css`
+  .repository.file.list .repo-button-row-right {
+    // protocol toggle
+    .ui.basic.button.active {
+      background-color: ${themeVars.color.button} !important;
+      color: ${themeVars.color.text.self} !important;
+      font-weight: 600;
     }
   }
 `;
@@ -82,9 +89,13 @@ export const repoFiles = css`
                 color: ${themeVars.color.text.self};
               }
             }
-            // 提交哈希值
+            // commit SHA hidden
             .ui.label {
               display: none;
+            }
+            // commit message weight
+            .commit-summary a {
+              font-weight: 400;
             }
           }
           relative-time {
@@ -126,8 +137,21 @@ export const repoFiles = css`
       }
     }
     #readme {
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: ${otherThemeVars.border.radius};
+      margin-top: 16px;
+      // readme links underlined
+      .markup a {
+        text-decoration: underline;
+      }
+      .markup {
+        padding: 24px 32px;
+        font-size: 16px;
+        line-height: 1.5;
+      }
       .file-header {
         background: ${themeVars.color.body};
+        border-bottom: 1px solid ${themeVars.color.light.border};
         min-height: 48px;
         padding: 0px 8px !important;
         overflow-x: visible;
