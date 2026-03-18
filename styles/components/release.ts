@@ -1,16 +1,30 @@
 import { css, themeVars } from "src/types/vars";
 
-// release 顶部栏左侧按钮组
+// release/tags toggle
 export const releaseTagMenu = css`
   .page-content.repository {
     &.releases,
     &.tags {
       h2.small.menu {
+        border-radius: 6px;
+        overflow: hidden;
         .item {
           background-color: unset !important;
           font-weight: 500;
+          font-size: 14px;
+          padding: 5px 16px;
+          height: 32px;
+          border: 1px solid ${themeVars.color.light.border};
+          &:first-child {
+            border-radius: 6px 0 0 6px;
+            border-right: 0;
+          }
+          &:last-child {
+            border-radius: 0 6px 6px 0;
+          }
           &.active {
             background: ${themeVars.github.bgColor.accent.emphasis} !important;
+            border-color: ${themeVars.github.bgColor.accent.emphasis};
             color: ${themeVars.color.white};
           }
         }
@@ -105,6 +119,7 @@ export const releases = css`
         // 右侧发布详细信息
         .segment.detail {
           padding: 16px;
+          border-radius: 6px;
           img.ui.avatar {
             border-radius: 9999px;
           }
@@ -113,8 +128,21 @@ export const releases = css`
           }
           // 标题
           .release-list-title {
-            font-size: 32px;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 36px;
             gap: 8px;
+            // "Stable"/"Latest" badge outline style
+            .ui.label {
+              background-color: transparent !important;
+              border: 1px solid ${themeVars.color.light.border} !important;
+              color: ${themeVars.color.text.light.num1} !important;
+              font-size: 12px;
+              font-weight: 500;
+              padding: 0 6px;
+              border-radius: 9999px;
+              line-height: 20px;
+            }
           }
           // 提交信息
           p.text.grey {
@@ -131,6 +159,8 @@ export const releases = css`
           }
           // 发布内容
           .markup {
+            font-size: 16px;
+            line-height: 24px;
             > *:first-child {
               margin-top: 24px !important;
             }

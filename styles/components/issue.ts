@@ -1,6 +1,44 @@
 import { css, otherThemeVars, themeVars } from "src/types/vars";
 import { activeItemAfterStyle } from "styles/public/menu";
 
+// fix issue opened icon should be green
+export const issueIconColor = css`
+  .svg.octicon-issue-opened.text.green {
+    color: ${themeVars.github.fgColor.success} !important;
+  }
+`;
+
+// issue filters bar styling
+export const issueFilters = css`
+  .page-content.repository.issue-list {
+    // issue checkbox not too far left
+    .issue-list-toolbar .issue-list-toolbar-left input {
+      margin-left: 16px !important;
+    }
+    // "New issue" button
+    .issue-navbar .ui.primary.button,
+    .issue-navbar a.ui.button.primary {
+      background-color: ${themeVars.github.bgColor.success.emphasis} !important;
+      border-color: ${themeVars.github.bgColor.success.emphasis} !important;
+      color: ${themeVars.color.white} !important;
+      height: 32px;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: 500;
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+    // Labels/Milestones button style
+    .issue-navbar .small-menu-items + .ui.button:not(.primary),
+    .issue-navbar .ui.button:not(.primary) {
+      height: 32px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+  }
+`;
+
 // 工单&PR 列表
 export const issueList = css`
   // 仓库页面的里程碑列表菜单栏
@@ -428,6 +466,25 @@ export const commentForm = css`
     &::before,
     &::after {
       display: none;
+    }
+  }
+  // comment editor
+  .repository .comment.form {
+    .content .ui.segment {
+      border-radius: ${otherThemeVars.border.radius};
+    }
+    // Close issue button
+    .field.footer .ui.red.basic.button,
+    .field.footer #status-button {
+      height: 32px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+    // Comment submit button
+    .field.footer .ui.primary.button {
+      height: 32px;
+      padding: 0 12px;
+      font-size: 14px;
     }
   }
 `;
