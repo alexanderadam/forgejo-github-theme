@@ -161,7 +161,7 @@ export const secondaryMenu = css`
   // 二级导航栏, 比如仓库的导航栏, 仓库列表的导航栏, 探索的类型导航栏
   .ui.secondary.pointing.menu {
     .overflow-menu-items {
-      gap: 4px;
+      gap: 8px;
       .item {
         padding: 5px 8px !important;
         margin-block-start: 0.5rem;
@@ -185,6 +185,10 @@ export const secondaryMenu = css`
     .active.item {
       // 取消激活时的下划线, 需要为透明, 保持间距
       border-color: #ffffff00;
+      // no extra underline on hover
+      &:hover {
+        border-color: #ffffff00;
+      }
       // 模仿 github 的下划线
       span:after {
         content: "";
@@ -203,6 +207,9 @@ export const secondaryMenu = css`
   // 修复仓库页面下的二级导航栏的下划线因浏览器 BUG 导致显示的异常问题(导致下划线和分割线重叠变粗)
   .page-content.repository .ui.secondary.pointing.menu {
     border-bottom: none !important;
+  }
+  .page-content.repository .secondary-nav {
+    margin-top: -0.5rem;
   }
 `;
 

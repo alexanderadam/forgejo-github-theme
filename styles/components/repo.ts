@@ -7,6 +7,8 @@ export const repoHeader = css`
     .ui.compact.button {
       padding: 3px 12px;
       font-size: 12px;
+      height: 28px;
+      line-height: 20px;
     }
     // counter badges on Watch/Star/Fork
     .ui.labeled.button > .ui.label {
@@ -15,6 +17,21 @@ export const repoHeader = css`
       padding: 3px 8px;
       min-width: 28px;
       text-align: center;
+      height: 28px;
+      line-height: 20px;
+    }
+    // all button groups same height
+    .flex-item-trailing {
+      align-items: center;
+      // move Star to the right via order
+      > .ui.labeled.button:has(.basic.button[href*="star"]),
+      > .ui.labeled.button:has(button[formaction*="star"]) {
+        order: 10;
+      }
+    }
+    // clone URL input
+    .repo-clone-url {
+      height: 28px;
     }
     // repo name
     .flex-item {
@@ -58,7 +75,8 @@ export const repoHeader = css`
 export const repoMenu = css`
   .page-content.repository {
     .repository-summary .repository-menu {
-      background-color: ${themeVars.color.box.header};
+      background-color: transparent;
+      border: none;
       .item {
         color: ${themeVars.color.text.light.num1};
         height: 31px; // 文件列表下与右侧输入框对齐
