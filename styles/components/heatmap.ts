@@ -27,13 +27,12 @@ export const heatmap = css`
       .vch__day__square,
       .vch__legend__wrapper rect {
         // 圆角
-        rx: 2.5px;
-        ry: 2.5px;
-        // hover 时的圆角
-        border-radius: 0.75px;
-        // 宽度和高度可以用来控制间隔
-        width: 9px;
-        height: 9px;
+        rx: 2px;
+        ry: 2px;
+        border-radius: 2px;
+        // 宽度和高度
+        width: 11px;
+        height: 11px;
         // 边框
         outline: 0.5px solid ${themeVars.github.contribution.default.borderColor.num0};
         // 边框向内偏移
@@ -89,7 +88,7 @@ export const activity = css`
           height: 32px;
           border-radius: 9999px;
         }
-        // octicon badge style like github timeline
+        // leading icon color
         svg {
           color: ${themeVars.color.text.light.num1};
         }
@@ -104,7 +103,7 @@ export const activity = css`
           align-items: baseline;
           gap: 6px;
           flex-wrap: wrap;
-          font-size: 14px;
+          font-size: 16px;
           color: ${themeVars.color.text.light.num1};
           > a {
             color: ${themeVars.color.text.self};
@@ -163,7 +162,7 @@ export const activity = css`
       padding: 12px 0px;
     }
   }
-  // gitea-unlock icon in feed - tone down the brightness
+  // gitea-unlock icon muted
   .flex-list#activity-feed .gitea-unlock,
   .flex-list#activity-feed svg.gitea-unlock,
   .flex-list#activity-feed .svg.gitea-unlock {
