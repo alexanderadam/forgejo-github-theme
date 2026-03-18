@@ -150,3 +150,11 @@ export const diff = css`
     }
   }
 `;
+
+// whitespace: consistent tab size + trailing ws highlight
+export const whitespace = css`
+  .code-inner {
+    tab-size: 4;
+    -moz-tab-size: 4;
+  }
+`;
