@@ -32,16 +32,15 @@ export const syncFork = css`
 
 // hide code search bar on repo main page
 export const codeSearch = css`
-  .repository.file.list .repo-search-form {
+  .repository.file.list .code-search {
     display: none;
   }
 `;
 
-// HTTPS/SSH clone buttons - no green active state
+// clone panel protocol toggle
 export const cloneButtons = css`
-  .repository.file.list .repo-button-row-right {
-    // protocol toggle
-    .ui.basic.button.active {
+  .repository.file.list .clone-panel {
+    .ui.button.primary {
       background-color: ${themeVars.color.button} !important;
       color: ${themeVars.color.text.self} !important;
       font-weight: 600;
