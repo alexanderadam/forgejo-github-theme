@@ -3,12 +3,11 @@ import { css, customThemeVars, otherThemeVars, themeVars } from "src/types/vars"
 
 const userRepoVar = fallbackVar(customThemeVars.userRepolistColumns, "2");
 const exploreRepoVar = fallbackVar(customThemeVars.explore.repolistColumns, "2");
-const orgRepoVar = fallbackVar(customThemeVars.org.repolistColumns, "1");
-
 // 仓库列表
 export const repoList = css`
-  // 组织
+  // 组织 (with sidebar: .ui.eleven, without: .ui.column)
   .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
+  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.column,
   // 用户
   .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
   // 探索
@@ -78,11 +77,11 @@ export const repoList = css`
       }
     }
   }
-  // 仓库列表列数
-  // 组织
-  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven > .flex-list {
-    grid-template-columns: repeat(${orgRepoVar}, 1fr);
-    gap: min(${orgRepoVar} * 8px, 16px);
+  // org repo list columns — overridden to single list in org.ts
+  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven > .flex-list,
+  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.column > .flex-list {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
   // 用户
   // 排除用户的公开活动页
@@ -134,11 +133,20 @@ export const userList = css`
       }
     }
   }
-  // 用户列表列数
-  // 组织
+  // org members — compact grid with smaller avatars
   .page-content.organization.members > .ui.container > .flex-list {
     grid-template-columns: repeat(${orgUserVar}, 1fr);
     gap: min(${orgUserVar} * 8px, 16px);
+    > .flex-item {
+      border: none !important;
+      padding: 8px !important;
+      .flex-item-leading {
+        img, svg {
+          width: 32px !important;
+          height: 32px !important;
+        }
+      }
+    }
   }
   // 探索的用户和组织
   .page-content.explore.users > .ui.container > .flex-list {
@@ -152,6 +160,7 @@ export const mobileList = css`
   @media (max-width: 767.98px) {
     // all repo/user grids collapse to single column on mobile
     .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
+    .page-content.organization.profile > .ui.container > .ui.stackable > .ui.column,
     .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
     .page-content.explore.repositories > .ui.container,
     .page-content.organization.members > .ui.container,
@@ -202,6 +211,7 @@ export const mobileList = css`
 export const notMatch = css`
   // 组织的仓库列表
   .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
+  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.column,
   // 用户的仓库列表
   .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
   // 探索的仓库列表
