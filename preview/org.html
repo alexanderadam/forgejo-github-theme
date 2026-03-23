@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="github-dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organization Page - Forgejo GitHub Theme Preview</title>
+<link rel="stylesheet" href="../dist/theme-github-dark.css">
+<style>
+/* Base resets */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { color-scheme: dark; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+body { background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc); font-size: 14px; line-height: 1.5; }
+a { color: var(--color-primary, #4493f8); text-decoration: none; }
+a:hover { text-decoration: underline; }
+svg { fill: currentColor; vertical-align: middle; }
+
+/* Preview nav */
+.preview-nav { background: #1a1a2e; border-bottom: 2px solid #16213e; padding: 8px 16px; font-size: 13px; position: sticky; top: 0; z-index: 1000; }
+.preview-nav a { color: #a8b2d1; margin-right: 16px; padding: 4px 8px; border-radius: 4px; }
+.preview-nav a:hover, .preview-nav a.active { background: #16213e; color: #ccd6f6; text-decoration: none; }
+.preview-nav .label { font-size: 11px; color: #8892b0; margin-right: 16px; }
+
+/* UI components */
+.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+.ui.button, .ui.compact.button { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text, #f0f6fc); cursor: pointer; font-size: 12px; padding: 3px 12px; height: 28px; line-height: 20px; white-space: nowrap; }
+.ui.primary.button { background: var(--color-primary, #1f6feb); border-color: var(--color-primary, #1f6feb); color: #fff; }
+.ui.label { display: inline-flex; align-items: center; padding: 0 7px; border-radius: 9999px; font-size: 12px; font-weight: 500; border: 1px solid transparent; line-height: 18px; }
+.ui.basic.label { background: transparent; border: 1px solid var(--color-light-border, #3d444d); }
+.ui.menu { display: flex; align-items: center; gap: 4px; }
+.ui.menu .item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; color: var(--color-text-light-1, #9198a1); font-size: 14px; cursor: pointer; }
+.ui.menu .item.active { color: var(--color-text, #f0f6fc); font-weight: 600; }
+.ui.secondary.pointing.menu { border-bottom: 1px solid var(--color-secondary, #30363d); }
+.ui.tabular.menu { display: flex; gap: 0; border-bottom: 1px solid var(--color-secondary, #30363d); }
+.ui.tabular.menu .item { padding: 8px 16px; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.ui.tabular.menu .item.active { border-bottom-color: var(--color-primary-text, #f78166); color: var(--color-text); }
+
+/* tw utilities */
+.tw-flex { display: flex; }
+.tw-inline-flex { display: inline-flex; }
+.tw-items-center { align-items: center; }
+.tw-justify-between { justify-content: space-between; }
+.tw-gap-2 { gap: 8px; }
+.tw-gap-3 { gap: 12px; }
+.tw-gap-4 { gap: 16px; }
+.tw-mr-2 { margin-right: 8px; }
+.tw-ml-2 { margin-left: 8px; }
+.tw-mt-2 { margin-top: 8px; }
+.tw-mb-2 { margin-bottom: 8px; }
+.tw-font-semibold { font-weight: 600; }
+.tw-hidden { display: none; }
+.tw-w-full { width: 100%; }
+.tw-flex-wrap { flex-wrap: wrap; }
+
+/* SVG / icon */
+.svg { display: inline-block; width: 16px; height: 16px; vertical-align: middle; }
+.octicon { display: inline-flex; align-items: center; }
+.text.grey, .text.gray { color: var(--color-text-light-1, #9198a1); }
+
+/* Full height layout */
+.full.height { min-height: 100vh; display: flex; flex-direction: column; }
+.page-content { flex: 1; padding: 16px 0; }
+
+/* Navbar */
+#navbar { background: var(--color-nav-bg, #161b22); border-bottom: 1px solid var(--color-secondary, #30363d); padding: 0 16px; height: 48px; display: flex; align-items: center; }
+#navbar .nav-inner { max-width: 1280px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 16px; }
+#navbar .nav-link { color: var(--color-text, #f0f6fc); font-size: 14px; font-weight: 500; padding: 4px 8px; border-radius: 6px; }
+#navbar .nav-link:hover { background: var(--color-button, #21262d); text-decoration: none; }
+
+/* Flex list */
+.flex-list { list-style: none; }
+.flex-item { display: flex; gap: 12px; padding: 16px; }
+.flex-item-leading { flex-shrink: 0; }
+.flex-item-leading img, .flex-item-leading svg { width: 24px; height: 24px; border-radius: 6px; }
+.flex-item-main { flex: 1; min-width: 0; }
+.flex-item-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.flex-item-title { display: flex; align-items: center; gap: 4px; }
+.flex-item-title a { font-size: 16px; font-weight: 600; }
+.flex-item-trailing { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--color-text-light-1, #9198a1); }
+.flex-item-body { margin-top: 4px; font-size: 13px; color: var(--color-text-light-1, #9198a1); }
+.color-icon { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+/* Label list (topics) */
+.label-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.label-list .label { background: var(--color-label-bg, rgba(56,139,253,0.15)); color: var(--color-primary, #4493f8); padding: 2px 8px; border-radius: 9999px; font-size: 12px; border: none; }
+
+/* Grid layout */
+.ui.stackable { display: flex; gap: 24px; }
+.ui.eleven { flex: 1; min-width: 0; }
+.ui.five.wide { width: 280px; flex-shrink: 0; }
+
+/* Repo search */
+.repo-search, .repos-search { display: flex; align-items: center; gap: 8px; padding: 8px 0; margin-bottom: 8px; }
+.repo-search input, .repos-search input { flex: 1; padding: 5px 12px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-input-bg, #0d1117); color: var(--color-text); font-size: 14px; height: 32px; }
+.repo-filter, .repos-filter { display: flex; gap: 8px; align-items: center; }
+.ui.dropdown { display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text); font-size: 13px; height: 32px; cursor: pointer; }
+
+/* Org avatar placeholder */
+.org-avatar-placeholder { width: 84px; height: 84px; border-radius: 6px; background: var(--color-button, #21262d); display: flex; align-items: center; justify-content: center; font-size: 36px; border: 1px solid var(--color-light-border, #3d444d); }
+
+/* Member avatar */
+.member-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--color-button, #21262d); border: 1px solid var(--color-light-border, #3d444d); }
+
+/* Sidebar section */
+.sidebar-section { margin-bottom: 20px; }
+.sidebar-section h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+.sidebar-section h4 a { font-size: 12px; font-weight: 400; color: var(--color-text-light-1); }
+</style>
+</head>
+<body>
+<div class="full height">
+
+<!-- Preview navigation -->
+<div class="preview-nav">
+  <span class="label">PREVIEW:</span>
+  <a href="index.html">Home</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="explore.html">Explore</a>
+  <a href="repo.html">Repo</a>
+  <a href="issues.html">Issues</a>
+  <a href="commits.html">Commits</a>
+  <a href="actions.html">Actions</a>
+  <a href="releases.html">Releases</a>
+  <a href="org.html" class="active">Org</a>
+</div>
+
+<!-- Navbar -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-link">
+      <svg width="28" height="28" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+    </a>
+    <a href="#" class="nav-link">Issues</a>
+    <a href="#" class="nav-link">Pull requests</a>
+    <a href="#" class="nav-link">Milestones</a>
+    <a href="#" class="nav-link">Explore</a>
+  </div>
+</nav>
+
+<!-- Organization page content -->
+<div class="page-content organization profile">
+  <div class="ui container">
+
+    <!-- Org header -->
+    <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; padding: 16px 0;">
+      <div class="org-avatar" style="flex-shrink: 0;">
+        <div class="org-avatar-placeholder">GH</div>
+      </div>
+      <div id="org-info" style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="ui header" style="font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+          GitHub
+          <span class="org-visibility"><span class="ui basic label" style="font-size: 11px;">Limited</span></span>
+        </div>
+        <div class="meta" style="font-size: 12px; color: var(--color-text-light-1);">
+          <svg class="svg" viewBox="0 0 16 16"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25z"/></svg>
+          https://github.com/
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab menu -->
+    <div class="ui tabular menu" style="margin-bottom: 16px;">
+      <a class="item active" style="gap: 6px;">
+        <svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg>
+        Repositories <span class="ui label" style="background: var(--color-label-bg); font-size: 11px; padding: 0 6px;">1305</span>
+      </a>
+      <a class="item" style="gap: 6px;">
+        <svg class="svg" viewBox="0 0 16 16"><path d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0z"/></svg>
+        Projects
+      </a>
+      <a class="item" style="gap: 6px;">
+        <svg class="svg" viewBox="0 0 16 16"><path d="M7.706 0C3.45 0 0 3.45 0 7.706s3.45 7.706 7.706 7.706 7.706-3.45 7.706-7.706S11.962 0 7.706 0z"/></svg>
+        Packages
+      </a>
+      <a class="item" style="gap: 6px;">
+        <svg class="svg" viewBox="0 0 16 16"><path d="M10.5 5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zm.061 3.073a4 4 0 1 0-5.123 0 6.004 6.004 0 0 0-3.431 5.142.75.75 0 0 0 1.498.07 4.5 4.5 0 0 1 8.99 0 .75.75 0 1 0 1.498-.07 6.005 6.005 0 0 0-3.432-5.142z"/></svg>
+        Members <span class="ui label" style="background: var(--color-label-bg); font-size: 11px; padding: 0 6px;">1</span>
+      </a>
+      <a class="item" style="gap: 6px;">
+        <svg class="svg" viewBox="0 0 16 16"><path d="M10.5 5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/></svg>
+        Teams <span class="ui label" style="background: var(--color-label-bg); font-size: 11px; padding: 0 6px;">1</span>
+      </a>
+    </div>
+
+    <!-- Main content grid -->
+    <div class="ui stackable">
+      <!-- Left: Repo list (11 wide) -->
+      <div class="ui eleven">
+
+        <!-- Search bar -->
+        <div class="repo-search">
+          <input type="search" placeholder="Search repos...">
+          <div class="repo-filter">
+            <div class="ui dropdown">Filter <svg class="svg" width="12" height="12" viewBox="0 0 16 16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427z"/></svg></div>
+            <div class="ui dropdown">Sort <svg class="svg" width="12" height="12" viewBox="0 0 16 16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427z"/></svg></div>
+          </div>
+        </div>
+
+        <!-- Repository list -->
+        <div class="flex-list">
+          <div class="flex-item">
+            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-main">
+              <div class="flex-item-header">
+                <div class="flex-item-title"><a href="#">jeboehm-docker-mailserver</a></div>
+                <div class="flex-item-trailing">
+                  <span class="flex-text-inline"><span class="color-icon" style="background: #89e051;"></span> Shell</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                </div>
+              </div>
+              <div class="flex-item-body">Docker Mailserver based on the famous ISPMail guide</div>
+              <div class="label-list">
+                <a class="label">alpine-linux</a>
+                <a class="label">bats</a>
+                <a class="label">docker</a>
+                <a class="label">docker-compose</a>
+                <a class="label">docker-mailserver</a>
+                <a class="label">dovecot</a>
+                <a class="label">imap-server</a>
+                <a class="label">mailserver</a>
+                <a class="label">postfix</a>
+                <a class="label">roundcube</a>
+                <a class="label">rspamd</a>
+              </div>
+              <div class="flex-item-body">Updated 5 hours ago</div>
+            </div>
+          </div>
+
+          <div class="flex-item">
+            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-main">
+              <div class="flex-item-header">
+                <div class="flex-item-title"><a href="#">ethicalml-awesome-production-ml</a></div>
+                <div class="flex-item-trailing">
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                </div>
+              </div>
+              <div class="flex-item-body">A curated list of awesome libraries to deploy, monitor, version and scale your machine learning</div>
+              <div class="label-list">
+                <a class="label">awesome-list</a>
+                <a class="label">data-mining</a>
+                <a class="label">deep-learning</a>
+                <a class="label">explainability</a>
+                <a class="label">large-scale-ml</a>
+                <a class="label">machine-learning</a>
+                <a class="label">ml-ops</a>
+                <a class="label">privacy-preserving</a>
+                <a class="label">production-ml</a>
+                <a class="label">responsible-ai</a>
+              </div>
+              <div class="flex-item-body">Updated 8 hours ago</div>
+            </div>
+          </div>
+
+          <div class="flex-item">
+            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-main">
+              <div class="flex-item-header">
+                <div class="flex-item-title"><a href="#">szimek-signature_pad</a></div>
+                <div class="flex-item-trailing">
+                  <span class="flex-text-inline"><span class="color-icon" style="background: #3178c6;"></span> TypeScript</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                </div>
+              </div>
+              <div class="flex-item-body">HTML5 canvas based smooth signature drawing</div>
+              <div class="label-list">
+                <a class="label">canvas</a>
+                <a class="label">drawing</a>
+                <a class="label">javascript</a>
+                <a class="label">signature</a>
+                <a class="label">signature-pad</a>
+              </div>
+              <div class="flex-item-body">Updated 8 hours ago</div>
+            </div>
+          </div>
+
+          <div class="flex-item">
+            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-main">
+              <div class="flex-item-header">
+                <div class="flex-item-title"><a href="#">manuelbl-swissqrbilldemo</a></div>
+                <div class="flex-item-trailing">
+                  <span class="flex-text-inline"><span class="color-icon" style="background: #3178c6;"></span> TypeScript</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                </div>
+              </div>
+              <div class="flex-item-body">Demo app for Swiss QR Bill generation</div>
+              <div class="flex-item-body">Updated 22 hours ago</div>
+            </div>
+          </div>
+
+          <div class="flex-item">
+            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-main">
+              <div class="flex-item-header">
+                <div class="flex-item-title"><a href="#">awesome-selfhosted-awesome-selfhosted</a></div>
+                <div class="flex-item-trailing">
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                </div>
+              </div>
+              <div class="flex-item-body">A list of Free Software network services and web applications which can be hosted on your own servers</div>
+              <div class="label-list">
+                <a class="label">awesome</a>
+                <a class="label">awesome-list</a>
+                <a class="label">cloud</a>
+                <a class="label">free-software</a>
+                <a class="label">hosting</a>
+                <a class="label">privacy</a>
+                <a class="label">self-hosted</a>
+                <a class="label">selfhosted</a>
+              </div>
+              <div class="flex-item-body">Updated 23 hours ago</div>
+            </div>
+          </div>
+
+          <div class="flex-item">
+            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-main">
+              <div class="flex-item-header">
+                <div class="flex-item-title"><a href="#">jgaskins-redis</a></div>
+                <div class="flex-item-trailing">
+                  <span class="flex-text-inline"><span class="color-icon" style="background: #000;"></span> Crystal</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
+                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                </div>
+              </div>
+              <div class="flex-item-body">Pure-Crystal Redis client</div>
+              <div class="label-list">
+                <a class="label">crystal</a>
+                <a class="label">crystal-lang</a>
+                <a class="label">redis</a>
+                <a class="label">redis-client</a>
+                <a class="label">redis-cluster</a>
+              </div>
+              <div class="flex-item-body">Updated 2 days ago</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right sidebar (5 wide) -->
+      <div class="ui five wide">
+        <!-- Members section -->
+        <div class="sidebar-section">
+          <h4>
+            Members
+            <a href="#">1 <svg class="svg" width="12" height="12" viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06z"/></svg></a>
+          </h4>
+          <div class="flex-list members" style="display: flex; flex-wrap: wrap; gap: 4px;">
+            <div class="flex-item" style="padding: 0;">
+              <a href="#"><img class="ui avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%23238636' rx='16'/%3E%3Ctext x='16' y='21' text-anchor='middle' fill='white' font-size='14'%3EAA%3C/text%3E%3C/svg%3E" width="32" height="32" style="border-radius: 50%;"></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teams section -->
+        <div class="sidebar-section" style="border-top: 1px solid var(--color-light-border); padding-top: 16px;">
+          <h4>
+            Teams
+            <a href="#">1 <svg class="svg" width="12" height="12" viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06z"/></svg></a>
+          </h4>
+          <div style="padding: 8px 0;">
+            <div style="font-weight: 600;"><a href="#">Owners</a></div>
+            <div style="font-size: 12px; color: var(--color-text-light-1);">1 members &middot; 1,305 repositories</div>
+          </div>
+          <a href="#" class="ui primary button" style="margin-top: 8px;">New team</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>
