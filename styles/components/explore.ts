@@ -207,6 +207,52 @@ export const mobileList = css`
   }
 `;
 
+// Explore / org / user search bar — flatten the two-piece input+submit button so
+// it reads as a single GitHub-style search field. Forgejo's template is
+// <form#repo-search-form><.ui.small.fluid.action.input><input[type=search]><button></…>
+// so we can't merge them in markup; instead we collapse the button visually
+// into the input.
+export const searchBar = css`
+  #repo-search-form .ui.action.input {
+    border: 1px solid ${themeVars.color.light.border};
+    border-radius: ${otherThemeVars.border.radius};
+    background: ${themeVars.color.input.background};
+    overflow: hidden;
+
+    > input[type="search"] {
+      border: none !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      flex: 1;
+    }
+
+    > input[type="search"]:focus,
+    > input[type="search"]:focus-visible {
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    // flatten the submit button into the field
+    > button.ui.icon.button {
+      border: none !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: ${themeVars.color.text.light.num1};
+
+      &:hover {
+        background: ${themeVars.color.hover.self} !important;
+      }
+    }
+
+    // single focus ring on the whole wrapper when the inner input is focused
+    &:focus-within {
+      border-color: ${themeVars.github.borderColor.accent.emphasis};
+      box-shadow: inset 0 0 0 1px ${themeVars.github.borderColor.accent.emphasis};
+    }
+  }
+`;
+
 // 统一无搜索结果时的样式
 export const notMatch = css`
   // 组织的仓库列表
