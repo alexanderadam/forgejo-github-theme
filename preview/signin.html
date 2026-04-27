@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en-US" data-theme="github-dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — Forgejo GitHub Theme Preview</title>
+<link rel="stylesheet" href="../dist/theme-github-dark.css">
+<style>
+html { color-scheme: dark; }
+body { margin: 0; background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc);
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+       font-size: 14px; line-height: 1.5; }
+a { color: var(--color-primary, #4493f8); text-decoration: none; }
+a:hover { text-decoration: underline; }
+svg.svg { display: inline-block; vertical-align: middle; fill: currentColor; }
+.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+/* Preview nav */
+.preview-nav { background: #1a1a2e; border-bottom: 2px solid #16213e; padding: 8px 16px; font-size: 13px; position: sticky; top: 0; z-index: 1000; }
+.preview-nav a { color: #a8b2d1; margin-right: 16px; padding: 4px 8px; border-radius: 4px; }
+.preview-nav a:hover, .preview-nav a.active { background: #16213e; color: #ccd6f6; text-decoration: none; }
+.preview-nav .label { font-size: 11px; color: #8892b0; margin-right: 16px; }
+
+/* Base layout fallbacks */
+.full.height { min-height: 100vh; display: flex; flex-direction: column; }
+#navbar { display: flex; align-items: center; height: 48px; padding: 0 16px; border-bottom: 1px solid var(--color-secondary, #30363d); background: var(--color-nav-bg, #161b22); }
+#navbar .ui.secondary.menu { display: flex; align-items: center; gap: 8px; }
+#navbar .navbar-left { flex: 1; }
+#navbar .item { padding: 4px 8px; color: var(--color-nav-text, #f0f6fc); border-radius: 6px; }
+#navbar .item.active { font-weight: 600; }
+
+.tw-flex { display: flex; } .tw-items-center { align-items: center; } .tw-gap-1 { gap: 4px; } .tw-gap-2 { gap: 8px; }
+.tw-gap-3 { gap: 12px; } .tw-mr-0 { margin-right: 0; } .tw-mr-2 { margin-right: 8px; } .tw-ml-auto { margin-left: auto; }
+.tw-flex-1 { flex: 1; } .tw-font-semibold { font-weight: 600; } .tw-text-right { text-align: right; }
+
+/* Buttons */
+.ui.button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text, #f0f6fc); cursor: pointer; font-size: 14px; padding: 8px 16px; height: 40px; width: 100%; font-weight: 500; text-decoration: none; }
+.ui.button:hover { background: #30363d; text-decoration: none; }
+.ui.primary.button { background: var(--color-primary, #1f6feb); border-color: var(--color-primary, #1f6feb); color: #fff; font-weight: 600; }
+.ui.primary.button:hover { background: #388bfd; }
+
+/* Sign-in real selectors */
+.page-content.user.signin { flex: 1; padding: 48px 0 24px; }
+.page-content.user.signin .ui.middle.aligned.center.aligned.grid { display: flex; justify-content: center; align-items: flex-start; }
+.page-content.user.signin .ui.middle.aligned.center.aligned.grid > .column { width: 384px; max-width: 100%; padding: 16px; }
+.page-content.user.signin .ui.top.attached.header { background: transparent; border: 0; font-size: 20px; font-weight: 600; text-align: center; padding: 16px 0; margin: 0; }
+.page-content.user.signin .ui.attached.segment { background: var(--color-box-body, transparent); border: 0; padding: 16px 0 0; }
+
+/* Form */
+.ui.form .field { margin-bottom: 16px; }
+.ui.form .field > label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+.ui.form input[type="text"],
+.ui.form input[type="password"] {
+  width: 100%; height: 40px; padding: 5px 12px;
+  border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px;
+  background: var(--color-input-bg, #0d1117); color: var(--color-text); font-size: 16px;
+  line-height: 20px; box-sizing: border-box;
+}
+.ui.form input:focus { border-color: var(--color-primary, #1f6feb); outline: none; box-shadow: 0 0 0 3px rgba(31,111,235,0.3); }
+.field.inline { display: flex; align-items: center; gap: 8px; }
+.field.inline label { margin-bottom: 0; font-weight: 400; font-size: 14px; }
+.ui.checkbox input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--color-primary, #1f6feb); margin: 0; }
+
+/* Divider */
+.divider.divider-text { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--color-text-light-1, #9198a1); font-size: 13px; text-transform: lowercase; }
+.divider.divider-text::before,
+.divider.divider-text::after { content: ""; flex: 1; border-top: 1px solid var(--color-light-border, #3d444d); }
+
+/* OAuth */
+#oauth2-login-navigator { margin-top: 4px; }
+#oauth2-login-navigator-inner { display: flex; flex-direction: column; gap: 8px; }
+#oauth2-login-navigator-inner .ui.button svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* Bottom links */
+.signin-links { margin-top: 16px; text-align: center; font-size: 13px; color: var(--color-text-light-1, #9198a1); }
+.signin-links a { color: var(--color-primary, #4493f8); }
+.forgot-link { display: block; text-align: right; margin-top: -8px; margin-bottom: 16px; font-size: 12px; }
+
+/* Footer */
+.page-footer { border-top: 1px solid var(--color-secondary, #30363d); padding: 24px 16px; display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light-1, #9198a1); margin-top: 48px; }
+.muted { color: var(--color-text-light-1); display: inline-flex; align-items: center; gap: 4px; }
+</style>
+</head>
+<body>
+<nav class="preview-nav">
+  <span class="label">Preview:</span>
+  <a href="index.html">index</a>
+  <a href="dashboard.html">dashboard</a>
+  <a href="explore.html">explore</a>
+  <a href="repo.html">repo</a>
+  <a href="commits.html">commits</a>
+  <a href="diff.html">diff</a>
+  <a href="issues.html">issues</a>
+  <a href="issue-detail.html">issue-detail</a>
+  <a href="pulls.html">pulls</a>
+  <a href="actions.html">actions</a>
+  <a href="releases.html">releases</a>
+  <a href="org.html">org</a>
+  <a href="settings.html">settings</a>
+  <a href="signin.html" class="active">signin</a>
+  <a href="markup.html">markup</a>
+</nav>
+
+<div class="full height">
+
+<!-- Navbar (logged-out: just logo + Sign in) -->
+<nav id="navbar" aria-label="Navigation bar">
+  <div class="navbar-left ui secondary menu">
+    <a class="item" id="navbar-logo" href="/" aria-label="Home">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fd7e14" d="M11 3.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V8l4 2-4 2v4.5c0 .8-.7 1.5-1.5 1.5S11 17.3 11 16.5V13l-4-2 4-2zM21 15c0 2.5-2 4.5-4.5 4.5S12 17.5 12 15s2-4.5 4.5-4.5S21 12.5 21 15z"/></svg>
+    </a>
+    <a class="item" href="/explore/repos">Explore</a>
+  </div>
+  <div class="navbar-right ui secondary menu">
+    <a class="item" href="/user/login">Sign in</a>
+  </div>
+</nav>
+
+<!-- Real Forgejo signin page-content -->
+<div role="main" aria-label="Sign in" class="page-content user signin">
+  <div class="ui middle aligned center aligned grid">
+    <div class="column">
+
+      <!-- Card heading -->
+      <h4 class="ui top attached header">Sign in</h4>
+
+      <!-- Card body -->
+      <div class="ui attached segment">
+
+        <!-- Optional alert/error placeholder (left empty for the happy path) -->
+        <div id="flash-message" hidden></div>
+
+        <!-- OAuth providers -->
+        <div id="oauth2-login-navigator">
+          <div id="oauth2-login-navigator-inner">
+            <a href="/user/oauth2/Kanidm" class="ui button">
+              <svg viewBox="0 0 16 16" class="svg octicon-key" aria-hidden="true" width="16" height="16"><path d="M10.5 0a5.499 5.499 0 1 1-1.288 10.848l-.932.932a.749.749 0 0 1-.53.22H7v.75a.749.749 0 0 1-.22.53l-.5.5a.749.749 0 0 1-.53.22H5v.75a.749.749 0 0 1-.22.53l-.5.5a.749.749 0 0 1-.53.22h-2A1.75 1.75 0 0 1 0 14.25v-2c0-.199.079-.39.22-.53l5.932-5.932A5.5 5.5 0 0 1 10.5 0m0 1.5a4 4 0 0 0-3.851 5.1.75.75 0 0 1-.194.744L1.5 12.31v1.94c0 .138.112.25.25.25h1.69l.31-.31v-1.19a.75.75 0 0 1 .75-.75h1.19l.31-.31v-1.19a.75.75 0 0 1 .75-.75h1.19l1.024-1.024a.75.75 0 0 1 .744-.194A4 4 0 1 0 10.5 1.5M11 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
+              Sign in with Kanidm
+            </a>
+            <a href="/user/oauth2/GitHub" class="ui button">
+              <svg viewBox="0 0 16 16" class="svg octicon-mark-github" aria-hidden="true" width="16" height="16"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8"/></svg>
+              Sign in with GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider divider-text">or</div>
+
+        <!-- Username/password form -->
+        <form class="ui form" action="/user/login" method="post">
+          <div class="field">
+            <label for="user_name">Username or email</label>
+            <input type="text" id="user_name" name="user_name" autocomplete="username" autofocus>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password">
+            <a href="/user/forgot_password" class="forgot-link">Forgot password?</a>
+          </div>
+          <div class="field inline">
+            <label class="ui checkbox" for="remember">
+              <input type="checkbox" id="remember" name="remember">
+            </label>
+            <label for="remember">Remember this device</label>
+          </div>
+          <button class="ui primary button" type="submit">Sign in</button>
+        </form>
+
+        <div class="signin-links">
+          Need an account? <a href="/user/sign_up">Register</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer" role="group" aria-label="Footer">
+  <div role="contentinfo">Page: <strong>2ms</strong> Template: <strong>1ms</strong></div>
+  <div>
+    <span class="muted"><svg viewBox="0 0 16 16" class="svg octicon-globe" aria-hidden="true" width="14" height="14"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0"/></svg> English</span>
+    <a href="#" style="margin-left:16px;">Licenses</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

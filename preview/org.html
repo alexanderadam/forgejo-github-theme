@@ -1,380 +1,349 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="github-dark">
+<html lang="en-US" data-theme="github-dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Organization Page - Forgejo GitHub Theme Preview</title>
+<title>acme-labs — Forgejo GitHub Theme Preview</title>
 <link rel="stylesheet" href="../dist/theme-github-dark.css">
 <style>
-/* Base resets */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { color-scheme: dark; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
-body { background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc); font-size: 14px; line-height: 1.5; }
+/* Minimal Forgejo-ish base only for things the theme stylesheet doesn't set.
+   The intent is for theme-github-dark.css to drive everything visible. */
+html { color-scheme: dark; }
+body { margin: 0; background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc);
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+       font-size: 14px; line-height: 1.5; }
 a { color: var(--color-primary, #4493f8); text-decoration: none; }
 a:hover { text-decoration: underline; }
-svg { fill: currentColor; vertical-align: middle; }
+svg.svg { display: inline-block; vertical-align: middle; fill: currentColor; }
+img.ui.avatar, .avatar { border-radius: 50%; vertical-align: middle; }
+.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
 
-/* Preview nav */
+/* Preview-nav bar */
 .preview-nav { background: #1a1a2e; border-bottom: 2px solid #16213e; padding: 8px 16px; font-size: 13px; position: sticky; top: 0; z-index: 1000; }
 .preview-nav a { color: #a8b2d1; margin-right: 16px; padding: 4px 8px; border-radius: 4px; }
 .preview-nav a:hover, .preview-nav a.active { background: #16213e; color: #ccd6f6; text-decoration: none; }
 .preview-nav .label { font-size: 11px; color: #8892b0; margin-right: 16px; }
 
-/* UI components */
-.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
-.ui.button, .ui.compact.button { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text, #f0f6fc); cursor: pointer; font-size: 12px; padding: 3px 12px; height: 28px; line-height: 20px; white-space: nowrap; }
-.ui.primary.button { background: var(--color-primary, #1f6feb); border-color: var(--color-primary, #1f6feb); color: #fff; }
-.ui.label { display: inline-flex; align-items: center; padding: 0 7px; border-radius: 9999px; font-size: 12px; font-weight: 500; border: 1px solid transparent; line-height: 18px; }
-.ui.basic.label { background: transparent; border: 1px solid var(--color-light-border, #3d444d); }
-.ui.menu { display: flex; align-items: center; gap: 4px; }
-.ui.menu .item { display: flex; align-items: center; gap: 4px; padding: 4px 8px; color: var(--color-text-light-1, #9198a1); font-size: 14px; cursor: pointer; }
-.ui.menu .item.active { color: var(--color-text, #f0f6fc); font-weight: 600; }
-.ui.secondary.pointing.menu { border-bottom: 1px solid var(--color-secondary, #30363d); }
-.ui.tabular.menu { display: flex; gap: 0; border-bottom: 1px solid var(--color-secondary, #30363d); }
-.ui.tabular.menu .item { padding: 8px 16px; border-bottom: 2px solid transparent; margin-bottom: -1px; }
-.ui.tabular.menu .item.active { border-bottom-color: var(--color-primary-text, #f78166); color: var(--color-text); }
+/* Layout fallbacks (mirror repo.html / explore.html) */
+.full.height { min-height: 100vh; }
+#navbar { display: flex; align-items: center; height: 48px; padding: 0 16px; border-bottom: 1px solid var(--color-secondary, #30363d); background: var(--color-nav-bg, #161b22); }
+#navbar .ui.secondary.menu { display: flex; align-items: center; gap: 8px; }
+#navbar .navbar-left { flex: 1; }
+#navbar .item { padding: 4px 8px; color: var(--color-nav-text, #f0f6fc); border-radius: 6px; }
+#navbar .item.active { font-weight: 600; }
 
-/* tw utilities */
-.tw-flex { display: flex; }
-.tw-inline-flex { display: inline-flex; }
-.tw-items-center { align-items: center; }
-.tw-justify-between { justify-content: space-between; }
-.tw-gap-2 { gap: 8px; }
-.tw-gap-3 { gap: 12px; }
-.tw-gap-4 { gap: 16px; }
-.tw-mr-2 { margin-right: 8px; }
-.tw-ml-2 { margin-left: 8px; }
-.tw-mt-2 { margin-top: 8px; }
-.tw-mb-2 { margin-bottom: 8px; }
-.tw-font-semibold { font-weight: 600; }
-.tw-hidden { display: none; }
-.tw-w-full { width: 100%; }
-.tw-flex-wrap { flex-wrap: wrap; }
+.tw-flex { display: flex; } .tw-items-center { align-items: center; } .tw-gap-1 { gap: 4px; } .tw-gap-2 { gap: 8px; }
+.tw-gap-3 { gap: 12px; } .tw-mr-0 { margin-right: 0; } .tw-mr-2 { margin-right: 8px; } .tw-ml-auto { margin-left: auto; }
+.tw-flex-1 { flex: 1; } .tw-font-semibold { font-weight: 600; } .tw-text-right { text-align: right; }
 
-/* SVG / icon */
-.svg { display: inline-block; width: 16px; height: 16px; vertical-align: middle; }
-.octicon { display: inline-flex; align-items: center; }
-.text.grey, .text.gray { color: var(--color-text-light-1, #9198a1); }
+/* org page: real Forgejo selectors are .page-content.organization.profile,
+   .ui.stackable, .ui.five.wide.column (sidebar) + .ui.eleven.wide.column (main). */
+.page-content.organization.profile { padding: 24px 0; }
+.page-content.organization.profile > .ui.container > .ui.stackable { display: grid; grid-template-columns: 296px 1fr; gap: 32px; align-items: start; }
+@media (max-width: 900px) { .page-content.organization.profile > .ui.container > .ui.stackable { grid-template-columns: 1fr; } }
 
-/* Full height layout */
-.full.height { min-height: 100vh; display: flex; flex-direction: column; }
-.page-content { flex: 1; padding: 16px 0; }
+/* Org sidebar */
+.org-avatar { display: block; width: 260px; height: 260px; border-radius: 6px; background: linear-gradient(135deg, #fd7e14, #f1502f); position: relative; }
+.org-avatar::after { content: 'AL'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 88px; font-weight: 700; letter-spacing: -4px; }
+#org-info { display: flex; flex-direction: column; gap: 8px; padding: 12px 0 16px; }
+#org-info .ui.header { font-size: 24px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px; }
+#org-info .markup { color: var(--color-text-light-1, #9198a1); font-size: 14px; }
+#org-info .meta { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--color-text-light-1, #9198a1); }
+#org-info .meta .item { display: inline-flex; align-items: center; gap: 6px; }
 
-/* Navbar */
-#navbar { background: var(--color-nav-bg, #161b22); border-bottom: 1px solid var(--color-secondary, #30363d); padding: 0 16px; height: 48px; display: flex; align-items: center; }
-#navbar .nav-inner { max-width: 1280px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 16px; }
-#navbar .nav-link { color: var(--color-text, #f0f6fc); font-size: 14px; font-weight: 500; padding: 4px 8px; border-radius: 6px; }
-#navbar .nav-link:hover { background: var(--color-button, #21262d); text-decoration: none; }
+.ui.top.attached.header { font-size: 14px; font-weight: 600; padding: 8px 0; margin: 0; display: flex; align-items: center; gap: 6px; color: var(--color-text-light-1, #9198a1); }
+.ui.top.attached.header .ui.label { font-size: 12px; padding: 0 6px; border-radius: 9999px; background: var(--color-secondary-bg, #21262d); color: var(--color-text-light-1, #9198a1); border: 1px solid var(--color-light-border, #3d444d); }
 
-/* Flex list */
-.flex-list { list-style: none; }
-.flex-item { display: flex; gap: 12px; padding: 16px; }
-.flex-item-leading { flex-shrink: 0; }
-.flex-item-leading img, .flex-item-leading svg { width: 24px; height: 24px; border-radius: 6px; }
-.flex-item-main { flex: 1; min-width: 0; }
-.flex-item-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-.flex-item-title { display: flex; align-items: center; gap: 4px; }
-.flex-item-title a { font-size: 16px; font-weight: 600; }
-.flex-item-trailing { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--color-text-light-1, #9198a1); }
-.flex-item-body { margin-top: 4px; font-size: 13px; color: var(--color-text-light-1, #9198a1); }
-.color-icon { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.ui.attached.segment.members { padding: 0 0 16px 0; display: flex; flex-wrap: wrap; gap: 4px; }
+.ui.attached.segment.members .ui.avatar { width: 36px; height: 36px; border-radius: 50%; }
 
-/* Label list (topics) */
-.label-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-.label-list .label { background: var(--color-label-bg, rgba(56,139,253,0.15)); color: var(--color-primary, #4493f8); padding: 2px 8px; border-radius: 9999px; font-size: 12px; border: none; }
+/* Top-tab nav (overflow-menu.secondary-nav) */
+.overflow-menu.secondary-nav { display: flex; gap: 0; border-bottom: 1px solid var(--color-secondary, #30363d); padding: 0; margin-bottom: 16px; }
+.overflow-menu.secondary-nav .overflow-menu-items { display: flex; gap: 4px; padding: 0; }
+.overflow-menu.secondary-nav .item { padding: 8px 12px; display: inline-flex; align-items: center; gap: 6px; border-bottom: 2px solid transparent; color: var(--color-text-light-1, #9198a1); }
+.overflow-menu.secondary-nav .item.active { border-bottom-color: var(--color-primary, #fd7e14); color: var(--color-text, #f0f6fc); font-weight: 600; }
+.overflow-menu.secondary-nav .item .ui.label, .overflow-menu.secondary-nav .item .counter { font-size: 11px; padding: 0 7px; background: var(--color-secondary-bg); color: var(--color-text-light-1); border-radius: 9999px; margin-left: 2px; }
 
-/* Grid layout */
-.ui.stackable { display: flex; gap: 24px; }
-.ui.eleven { flex: 1; min-width: 0; }
-.ui.five.wide { width: 280px; flex-shrink: 0; }
+/* Repo search row above the list */
+.repo-search { display: flex; gap: 8px; align-items: center; padding: 8px 0; }
+.repo-search .ui.input { flex: 1; }
+.repo-search input[type="search"] { width: 100%; padding: 5px 12px; background: var(--color-input-bg, #0d1117); border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; color: var(--color-text); font-size: 14px; }
+.repo-filter { display: inline-flex; gap: 8px; }
+.repo-filter .ui.dropdown { display: inline-flex; align-items: center; gap: 4px; cursor: default; padding: 5px 10px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); font-size: 14px; }
 
-/* Repo search */
-.repo-search, .repos-search { display: flex; align-items: center; gap: 8px; padding: 8px 0; margin-bottom: 8px; }
-.repo-search input, .repos-search input { flex: 1; padding: 5px 12px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-input-bg, #0d1117); color: var(--color-text); font-size: 14px; height: 32px; }
-.repo-filter, .repos-filter { display: flex; gap: 8px; align-items: center; }
-.ui.dropdown { display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text); font-size: 13px; height: 32px; cursor: pointer; }
+/* flex-list — same shape as explore.html */
+.flex-list { list-style: none; padding: 0; margin: 0; display: block; }
+.flex-list > .flex-item { display: flex; padding: 16px; border-bottom: 1px solid var(--color-light-border, #3d444d); }
+.flex-list > .flex-item:last-child { border-bottom: none; }
+.flex-item-leading { margin-right: 12px; display: flex; align-items: flex-start; padding-top: 4px; color: var(--color-text-light-1, #9198a1); }
+.flex-item-main { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.flex-item-header { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.flex-item-title { font-weight: 600; font-size: 16px; }
+.flex-item-title a { color: var(--color-primary, #4493f8); }
+.flex-item-body { font-size: 13px; color: var(--color-text-light-1, #9198a1); line-height: 1.5; }
+.flex-item-trailing { display: flex; align-items: center; gap: 12px; color: var(--color-text-light-1); font-size: 12px; }
+.flex-text-inline { display: inline-flex; align-items: center; gap: 4px; }
+.color-icon { display: inline-block; width: 12px; height: 12px; border-radius: 50%; position: relative; top: 1px; }
+.label.basic { display: inline-flex; align-items: center; padding: 0 7px; border-radius: 9999px; font-size: 12px; font-weight: 500; border: 1px solid var(--color-light-border, #3d444d); color: var(--color-text-light-1); line-height: 18px; background: transparent; }
 
-/* Org avatar placeholder */
-.org-avatar-placeholder { width: 84px; height: 84px; border-radius: 6px; background: var(--color-button, #21262d); display: flex; align-items: center; justify-content: center; font-size: 36px; border: 1px solid var(--color-light-border, #3d444d); }
+/* Avatar placeholders */
+.placeholder-avatar { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 600; background: linear-gradient(135deg, #6f42c1, #bc4e99); flex-shrink: 0; }
+.placeholder-avatar.lg { width: 36px; height: 36px; font-size: 13px; }
+.placeholder-avatar.green { background: linear-gradient(135deg, #2ea043, #1f6feb); }
+.placeholder-avatar.orange { background: linear-gradient(135deg, #fd7e14, #db6d28); }
+.placeholder-avatar.purple-yellow { background: linear-gradient(135deg, #8957e5, #d29922); }
+.placeholder-avatar.red { background: linear-gradient(135deg, #f85149, #db6d28); }
+.placeholder-avatar.teal { background: linear-gradient(135deg, #1f6feb, #2ea043); }
 
-/* Member avatar */
-.member-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--color-button, #21262d); border: 1px solid var(--color-light-border, #3d444d); }
-
-/* Sidebar section */
-.sidebar-section { margin-bottom: 20px; }
-.sidebar-section h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-.sidebar-section h4 a { font-size: 12px; font-weight: 400; color: var(--color-text-light-1); }
+.page-footer { border-top: 1px solid var(--color-secondary, #30363d); padding: 24px 16px; display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light-1, #9198a1); margin-top: 48px; }
+.page-footer a { color: var(--color-text-light-1, #9198a1); margin: 0 8px; }
 </style>
 </head>
 <body>
+<nav class="preview-nav">
+  <span class="label">Preview:</span>
+  <a href="index.html">index</a>
+  <a href="dashboard.html">dashboard</a>
+  <a href="explore.html">explore</a>
+  <a href="repo.html">repo</a>
+  <a href="commits.html">commits</a>
+  <a href="diff.html">diff</a>
+  <a href="issues.html">issues</a>
+  <a href="issue-detail.html">issue-detail</a>
+  <a href="pulls.html">pulls</a>
+  <a href="actions.html">actions</a>
+  <a href="releases.html">releases</a>
+  <a href="org.html" class="active">org</a>
+  <a href="settings.html">settings</a>
+  <a href="signin.html">signin</a>
+  <a href="markup.html">markup</a>
+</nav>
+
 <div class="full height">
 
-<!-- Preview navigation -->
-<div class="preview-nav">
-  <span class="label">PREVIEW:</span>
-  <a href="index.html">Home</a>
-  <a href="dashboard.html">Dashboard</a>
-  <a href="explore.html">Explore</a>
-  <a href="repo.html">Repo</a>
-  <a href="issues.html">Issues</a>
-  <a href="commits.html">Commits</a>
-  <a href="actions.html">Actions</a>
-  <a href="releases.html">Releases</a>
-  <a href="org.html" class="active">Org</a>
-</div>
-
-<!-- Navbar -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <a href="#" class="nav-link">
-      <svg width="28" height="28" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+<nav id="navbar" aria-label="Navigation bar">
+  <div class="navbar-left ui secondary menu">
+    <a class="item" id="navbar-logo" href="/" aria-label="Dashboard">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fd7e14" d="M11 3.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V8l4 2-4 2v4.5c0 .8-.7 1.5-1.5 1.5S11 17.3 11 16.5V13l-4-2 4-2zM21 15c0 2.5-2 4.5-4.5 4.5S12 17.5 12 15s2-4.5 4.5-4.5S21 12.5 21 15z"/></svg>
     </a>
-    <a href="#" class="nav-link">Issues</a>
-    <a href="#" class="nav-link">Pull requests</a>
-    <a href="#" class="nav-link">Milestones</a>
-    <a href="#" class="nav-link">Explore</a>
+    <a class="item" href="/issues">Issues</a>
+    <a class="item" href="/pulls">Pull requests</a>
+    <a class="item" href="/milestones">Milestones</a>
+    <a class="item" href="/explore/repos">Explore</a>
+  </div>
+  <div class="navbar-right ui secondary menu">
+    <a class="item" href="/notifications" aria-label="Notifications">
+      <svg viewBox="0 0 16 16" class="svg octicon-bell" aria-hidden="true" width="16" height="16"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16M3 5a5 5 0 0 1 10 0v2.947q0 .076.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.26.26 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556-.003.01.001.006q0 .003.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007-.003-.01-1.703-2.554a1.75 1.75 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5"/></svg>
+    </a>
+    <div class="ui dropdown jump item" role="menu" aria-label="Create…" tabindex="0">
+      <span class="text">
+        <svg viewBox="0 0 16 16" class="svg octicon-plus" aria-hidden="true" width="16" height="16"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2"/></svg>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+    <div class="ui dropdown jump item" role="menu" aria-label="Profile and settings…" tabindex="0">
+      <span class="text tw-flex tw-items-center">
+        <span class="placeholder-avatar" title="Octo Demo">OD</span>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16" style="margin-left:4px"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
   </div>
 </nav>
 
-<!-- Organization page content -->
-<div class="page-content organization profile">
+<!-- Real Forgejo org page: .page-content.organization.profile.
+     Layout: > .ui.container > .ui.stackable > .ui.five.wide.column (sidebar)
+                                                 + .ui.eleven.wide.column (main). -->
+<div role="main" aria-label="acme-labs" class="page-content organization profile">
   <div class="ui container">
+    <div class="ui stackable grid">
 
-    <!-- Org header -->
-    <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; padding: 16px 0;">
-      <div class="org-avatar" style="flex-shrink: 0;">
-        <div class="org-avatar-placeholder">GH</div>
-      </div>
-      <div id="org-info" style="display: flex; flex-direction: column; gap: 8px;">
-        <div class="ui header" style="font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-          GitHub
-          <span class="org-visibility"><span class="ui basic label" style="font-size: 11px;">Limited</span></span>
+      <!-- ============== Sidebar (.ui.five.wide.column) ============== -->
+      <aside class="ui five wide column">
+        <a href="/acme-labs" class="org-avatar" aria-label="acme-labs avatar"></a>
+        <div id="org-info">
+          <h1 class="ui header">
+            <a href="/acme-labs">acme-labs</a>
+          </h1>
+          <div class="markup">Internal tooling and CI helpers for ACME Labs.</div>
+          <div class="meta">
+            <span class="item">
+              <svg viewBox="0 0 16 16" class="svg octicon-verified" aria-hidden="true" width="16" height="16"><path d="M9.585.52a2.68 2.68 0 0 0-3.17 0l-.928.68a1.18 1.18 0 0 1-.518.215L3.83 1.59a2.68 2.68 0 0 0-2.24 2.24l-.175 1.14a1.18 1.18 0 0 1-.215.518l-.68.928a2.68 2.68 0 0 0 0 3.17l.68.928c.113.153.186.33.215.518l.175 1.138a2.68 2.68 0 0 0 2.24 2.24l1.138.175c.187.029.365.102.518.215l.928.68a2.68 2.68 0 0 0 3.17 0l.928-.68a1.18 1.18 0 0 1 .518-.215l1.138-.175a2.68 2.68 0 0 0 2.241-2.241l.175-1.138c.029-.187.102-.365.215-.518l.68-.928a2.68 2.68 0 0 0 0-3.17l-.68-.928a1.18 1.18 0 0 1-.215-.518L14.41 3.83a2.68 2.68 0 0 0-2.24-2.24l-1.138-.175a1.18 1.18 0 0 1-.518-.215zM7.303 1.728c.415-.305.98-.305 1.394 0l.928.68c.348.256.752.423 1.18.489l1.136.174c.51.078.909.478.987.987l.174 1.137c.066.427.233.831.489 1.18l.68.927c.305.415.305.98 0 1.394l-.68.928a2.68 2.68 0 0 0-.489 1.18l-.174 1.136a1.18 1.18 0 0 1-.987.987l-1.137.174a2.68 2.68 0 0 0-1.18.489l-.927.68c-.415.305-.98.305-1.394 0l-.928-.68a2.68 2.68 0 0 0-1.18-.489l-1.136-.174a1.18 1.18 0 0 1-.987-.987l-.174-1.137a2.68 2.68 0 0 0-.489-1.18l-.68-.927a1.18 1.18 0 0 1 0-1.394l.68-.928c.256-.348.423-.752.489-1.18l.174-1.136c.078-.51.478-.909.987-.987l1.137-.174a2.68 2.68 0 0 0 1.18-.489zM11.28 6.78a.75.75 0 0 0-1.06-1.06L7 8.94 5.78 7.72a.75.75 0 0 0-1.06 1.06l1.75 1.75a.75.75 0 0 0 1.06 0z"/></svg>
+              <a href="https://acme-labs.invalid">acme-labs.invalid</a>
+            </span>
+            <span class="item">
+              <svg viewBox="0 0 16 16" class="svg octicon-location" aria-hidden="true" width="16" height="16"><path d="m12.596 11.596-3.535 3.536a1.5 1.5 0 0 1-2.122 0l-3.535-3.536a6.5 6.5 0 1 1 9.192-9.193 6.5 6.5 0 0 1 0 9.193m-1.06-8.132a5 5 0 1 0-7.072 7.072L8 14.07l3.536-3.534a5 5 0 0 0 0-7.072M8 9a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 9"/></svg>
+              Geneva, Switzerland
+            </span>
+            <span class="item">
+              <svg viewBox="0 0 16 16" class="svg octicon-people" aria-hidden="true" width="16" height="16"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.51 5.51 0 0 1 3.034 4.014.75.75 0 1 1-1.482.235 4 4 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.51 5.51 0 0 1 3.102 8.05 3.49 3.49 0 0 1 2 5.5M11 4a3.001 3.001 0 0 1 2.22 5.018 5 5 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.75.75 0 0 1-.549-.522 3.5 3.5 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4M5.5 3.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5"/></svg>
+              <a href="/acme-labs/people">6 members</a>
+            </span>
+          </div>
         </div>
-        <div class="meta" style="font-size: 12px; color: var(--color-text-light-1);">
-          <svg class="svg" viewBox="0 0 16 16"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25z"/></svg>
-          https://github.com/
+
+        <h4 class="ui top attached header">
+          People <span class="ui label">6</span>
+        </h4>
+        <div class="ui attached segment members">
+          <a href="/octo-demo" title="Octo Demo"><span class="placeholder-avatar lg" aria-hidden="true">OD</span></a>
+          <a href="/alice" title="alice"><span class="placeholder-avatar lg green" aria-hidden="true">AL</span></a>
+          <a href="/bob" title="bob"><span class="placeholder-avatar lg orange" aria-hidden="true">BO</span></a>
+          <a href="/carol" title="carol"><span class="placeholder-avatar lg purple-yellow" aria-hidden="true">CA</span></a>
+          <a href="/dave" title="dave"><span class="placeholder-avatar lg red" aria-hidden="true">DA</span></a>
+          <a href="/erin" title="erin"><span class="placeholder-avatar lg teal" aria-hidden="true">ER</span></a>
         </div>
-      </div>
-    </div>
+      </aside>
 
-    <!-- Tab menu -->
-    <div class="ui tabular menu" style="margin-bottom: 16px;">
-      <a class="item active" style="gap: 6px;">
-        <svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg>
-        Repositories <span class="ui label" style="background: var(--color-label-bg); font-size: 11px; padding: 0 6px;">1305</span>
-      </a>
-      <a class="item" style="gap: 6px;">
-        <svg class="svg" viewBox="0 0 16 16"><path d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0z"/></svg>
-        Projects
-      </a>
-      <a class="item" style="gap: 6px;">
-        <svg class="svg" viewBox="0 0 16 16"><path d="M7.706 0C3.45 0 0 3.45 0 7.706s3.45 7.706 7.706 7.706 7.706-3.45 7.706-7.706S11.962 0 7.706 0z"/></svg>
-        Packages
-      </a>
-      <a class="item" style="gap: 6px;">
-        <svg class="svg" viewBox="0 0 16 16"><path d="M10.5 5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zm.061 3.073a4 4 0 1 0-5.123 0 6.004 6.004 0 0 0-3.431 5.142.75.75 0 0 0 1.498.07 4.5 4.5 0 0 1 8.99 0 .75.75 0 1 0 1.498-.07 6.005 6.005 0 0 0-3.432-5.142z"/></svg>
-        Members <span class="ui label" style="background: var(--color-label-bg); font-size: 11px; padding: 0 6px;">1</span>
-      </a>
-      <a class="item" style="gap: 6px;">
-        <svg class="svg" viewBox="0 0 16 16"><path d="M10.5 5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/></svg>
-        Teams <span class="ui label" style="background: var(--color-label-bg); font-size: 11px; padding: 0 6px;">1</span>
-      </a>
-    </div>
+      <!-- ============== Main content (.ui.eleven.wide.column) ============== -->
+      <div class="ui eleven wide column">
 
-    <!-- Main content grid -->
-    <div class="ui stackable">
-      <!-- Left: Repo list (11 wide) -->
-      <div class="ui eleven">
+        <overflow-menu class="ui secondary pointing tabular top attached borderless menu secondary-nav" role="navigation">
+          <div class="overflow-menu-items">
+            <a class="item" href="/acme-labs">
+              <svg viewBox="0 0 16 16" class="svg octicon-book" aria-hidden="true" width="16" height="16"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.74 3.74 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574M8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25"/></svg>
+              Overview
+            </a>
+            <a class="active item" href="/acme-labs/repositories">
+              <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+              Repositories <span class="ui label">4</span>
+            </a>
+            <a class="item" href="/acme-labs/-/projects">
+              <svg viewBox="0 0 16 16" class="svg octicon-project" aria-hidden="true" width="16" height="16"><path d="M1.75 0A1.75 1.75 0 0 0 0 1.75v12.5C0 15.216.784 16 1.75 16h12.5A1.75 1.75 0 0 0 16 14.25V1.75A1.75 1.75 0 0 0 14.25 0Zm-.25 1.75a.25.25 0 0 1 .25-.25h12.5a.25.25 0 0 1 .25.25v12.5a.25.25 0 0 1-.25.25H1.75a.25.25 0 0 1-.25-.25ZM11.75 3a.75.75 0 0 0-.75.75v7.5a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75m-8.25.75a.75.75 0 0 1 1.5 0v5.5a.75.75 0 0 1-1.5 0ZM8 3a.75.75 0 0 0-.75.75v3.5a.75.75 0 0 0 1.5 0v-3.5A.75.75 0 0 0 8 3"/></svg>
+              Projects
+            </a>
+            <a class="item" href="/acme-labs/-/packages">
+              <svg viewBox="0 0 16 16" class="svg octicon-package" aria-hidden="true" width="16" height="16"><path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.2.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0M7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.25.25 0 0 0-.25 0M2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"/></svg>
+              Packages
+            </a>
+            <a class="item" href="/org/acme-labs/teams">
+              <svg viewBox="0 0 16 16" class="svg octicon-people" aria-hidden="true" width="16" height="16"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.51 5.51 0 0 1 3.034 4.014.75.75 0 1 1-1.482.235 4 4 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.51 5.51 0 0 1 3.102 8.05 3.49 3.49 0 0 1 2 5.5M11 4a3.001 3.001 0 0 1 2.22 5.018 5 5 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.75.75 0 0 1-.549-.522 3.5 3.5 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4M5.5 3.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5"/></svg>
+              Teams <span class="ui label">2</span>
+            </a>
+            <a class="item" href="/org/acme-labs/members">
+              <svg viewBox="0 0 16 16" class="svg octicon-person" aria-hidden="true" width="16" height="16"><path d="M10.561 8.073a6 6 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6 6 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0M10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0"/></svg>
+              People <span class="ui label">6</span>
+            </a>
+          </div>
+        </overflow-menu>
 
-        <!-- Search bar -->
+        <!-- Repo search/filter row (real selector: .repo-search) -->
         <div class="repo-search">
-          <input type="search" placeholder="Search repos...">
+          <div class="ui input tw-flex-1">
+            <input type="search" name="q" placeholder="Find a repository…" dir="auto">
+          </div>
           <div class="repo-filter">
-            <div class="ui dropdown">Filter <svg class="svg" width="12" height="12" viewBox="0 0 16 16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427z"/></svg></div>
-            <div class="ui dropdown">Sort <svg class="svg" width="12" height="12" viewBox="0 0 16 16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427z"/></svg></div>
+            <div class="ui dropdown" role="combobox" tabindex="0">
+              <span class="text">Type</span>
+              <svg viewBox="0 0 16 16" class="dropdown icon svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+            </div>
+            <div class="ui dropdown" role="combobox" tabindex="0">
+              <span class="text">Language</span>
+              <svg viewBox="0 0 16 16" class="dropdown icon svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+            </div>
+            <div class="ui dropdown" role="combobox" tabindex="0">
+              <span class="text">Sort</span>
+              <svg viewBox="0 0 16 16" class="dropdown icon svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+            </div>
           </div>
         </div>
 
-        <!-- Repository list -->
+        <!-- Repo list — single-column flex-list, themed by org.ts -->
         <div class="flex-list">
+
           <div class="flex-item">
-            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-leading">
+              <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+            </div>
             <div class="flex-item-main">
               <div class="flex-item-header">
-                <div class="flex-item-title"><a href="#">jeboehm-docker-mailserver</a></div>
+                <span class="flex-item-title"><a href="/acme-labs/widget-cli">acme-labs / widget-cli</a></span>
+                <span class="label basic">Public</span>
                 <div class="flex-item-trailing">
-                  <span class="flex-text-inline"><span class="color-icon" style="background: #89e051;"></span> Shell</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                  <span class="flex-text-inline"><span class="color-icon" style="background:#dea584"></span> Rust</span>
+                  <span class="flex-text-inline">
+                    <svg viewBox="0 0 16 16" class="svg octicon-star" aria-hidden="true" width="16" height="16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25"/></svg>
+                    42
+                  </span>
+                  <span class="flex-text-inline">
+                    <svg viewBox="0 0 16 16" class="svg octicon-repo-forked" aria-hidden="true" width="16" height="16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0"/></svg>
+                    3
+                  </span>
                 </div>
               </div>
-              <div class="flex-item-body">Docker Mailserver based on the famous ISPMail guide</div>
-              <div class="label-list">
-                <a class="label">alpine-linux</a>
-                <a class="label">bats</a>
-                <a class="label">docker</a>
-                <a class="label">docker-compose</a>
-                <a class="label">docker-mailserver</a>
-                <a class="label">dovecot</a>
-                <a class="label">imap-server</a>
-                <a class="label">mailserver</a>
-                <a class="label">postfix</a>
-                <a class="label">roundcube</a>
-                <a class="label">rspamd</a>
-              </div>
-              <div class="flex-item-body">Updated 5 hours ago</div>
+              <div class="flex-item-body">Command-line workflow for provisioning ACME Labs test fixtures. Fast enough that the CI team has stopped complaining (mostly).</div>
+              <div class="flex-item-body"><span class="flex-text-inline">Updated last week</span></div>
             </div>
           </div>
 
           <div class="flex-item">
-            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-leading">
+              <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+            </div>
             <div class="flex-item-main">
               <div class="flex-item-header">
-                <div class="flex-item-title"><a href="#">ethicalml-awesome-production-ml</a></div>
+                <span class="flex-item-title"><a href="/acme-labs/internal-actions">acme-labs / internal-actions</a></span>
+                <span class="label basic">Public</span>
                 <div class="flex-item-trailing">
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                  <span class="flex-text-inline"><span class="color-icon" style="background:#cb171e"></span> YAML</span>
+                  <span class="flex-text-inline">
+                    <svg viewBox="0 0 16 16" class="svg octicon-star" aria-hidden="true" width="16" height="16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25"/></svg>
+                    8
+                  </span>
                 </div>
               </div>
-              <div class="flex-item-body">A curated list of awesome libraries to deploy, monitor, version and scale your machine learning</div>
-              <div class="label-list">
-                <a class="label">awesome-list</a>
-                <a class="label">data-mining</a>
-                <a class="label">deep-learning</a>
-                <a class="label">explainability</a>
-                <a class="label">large-scale-ml</a>
-                <a class="label">machine-learning</a>
-                <a class="label">ml-ops</a>
-                <a class="label">privacy-preserving</a>
-                <a class="label">production-ml</a>
-                <a class="label">responsible-ai</a>
-              </div>
-              <div class="flex-item-body">Updated 8 hours ago</div>
+              <div class="flex-item-body">Reusable Forgejo Actions workflows used across the org.</div>
+              <div class="flex-item-body"><span class="flex-text-inline">Updated 3 days ago</span></div>
             </div>
           </div>
 
           <div class="flex-item">
-            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-leading">
+              <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+            </div>
             <div class="flex-item-main">
               <div class="flex-item-header">
-                <div class="flex-item-title"><a href="#">szimek-signature_pad</a></div>
+                <span class="flex-item-title"><a href="/acme-labs/.forgejo">acme-labs / .forgejo</a></span>
+                <span class="label basic">Public</span>
                 <div class="flex-item-trailing">
-                  <span class="flex-text-inline"><span class="color-icon" style="background: #3178c6;"></span> TypeScript</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                  <span class="flex-text-inline"><span class="color-icon" style="background:#083fa1"></span> Markdown</span>
                 </div>
               </div>
-              <div class="flex-item-body">HTML5 canvas based smooth signature drawing</div>
-              <div class="label-list">
-                <a class="label">canvas</a>
-                <a class="label">drawing</a>
-                <a class="label">javascript</a>
-                <a class="label">signature</a>
-                <a class="label">signature-pad</a>
-              </div>
-              <div class="flex-item-body">Updated 8 hours ago</div>
+              <div class="flex-item-body">Org-level community profile and onboarding docs.</div>
+              <div class="flex-item-body"><span class="flex-text-inline">Updated on Mar 11, 2026</span></div>
             </div>
           </div>
 
           <div class="flex-item">
-            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
+            <div class="flex-item-leading">
+              <svg viewBox="0 0 16 16" class="svg octicon-lock" aria-hidden="true" width="16" height="16"><path d="M4 4a4 4 0 0 1 8 0v2h.25c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 12.25 15h-8.5A1.75 1.75 0 0 1 2 13.25v-5.5C2 6.784 2.784 6 3.75 6H4Zm8.25 3.5h-8.5a.25.25 0 0 0-.25.25v5.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25M10.5 6V4a2.5 2.5 0 1 0-5 0v2Z"/></svg>
+            </div>
             <div class="flex-item-main">
               <div class="flex-item-header">
-                <div class="flex-item-title"><a href="#">manuelbl-swissqrbilldemo</a></div>
+                <span class="flex-item-title"><a href="/acme-labs/migration-toolkit">acme-labs / migration-toolkit</a></span>
+                <span class="label basic">Private</span>
                 <div class="flex-item-trailing">
-                  <span class="flex-text-inline"><span class="color-icon" style="background: #3178c6;"></span> TypeScript</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
+                  <span class="flex-text-inline"><span class="color-icon" style="background:#3572A5"></span> Python</span>
                 </div>
               </div>
-              <div class="flex-item-body">Demo app for Swiss QR Bill generation</div>
-              <div class="flex-item-body">Updated 22 hours ago</div>
+              <div class="flex-item-body">Internal migrations between Postgres versions; needs a polish.</div>
+              <div class="flex-item-body"><span class="flex-text-inline">Updated yesterday</span></div>
             </div>
           </div>
 
-          <div class="flex-item">
-            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
-            <div class="flex-item-main">
-              <div class="flex-item-header">
-                <div class="flex-item-title"><a href="#">awesome-selfhosted-awesome-selfhosted</a></div>
-                <div class="flex-item-trailing">
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
-                </div>
-              </div>
-              <div class="flex-item-body">A list of Free Software network services and web applications which can be hosted on your own servers</div>
-              <div class="label-list">
-                <a class="label">awesome</a>
-                <a class="label">awesome-list</a>
-                <a class="label">cloud</a>
-                <a class="label">free-software</a>
-                <a class="label">hosting</a>
-                <a class="label">privacy</a>
-                <a class="label">self-hosted</a>
-                <a class="label">selfhosted</a>
-              </div>
-              <div class="flex-item-body">Updated 23 hours ago</div>
-            </div>
-          </div>
-
-          <div class="flex-item">
-            <div class="flex-item-leading"><svg class="svg" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5z"/></svg></div>
-            <div class="flex-item-main">
-              <div class="flex-item-header">
-                <div class="flex-item-title"><a href="#">jgaskins-redis</a></div>
-                <div class="flex-item-trailing">
-                  <span class="flex-text-inline"><span class="color-icon" style="background: #000;"></span> Crystal</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg> 0</span>
-                  <span><svg class="svg" width="14" height="14" viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg> 0</span>
-                </div>
-              </div>
-              <div class="flex-item-body">Pure-Crystal Redis client</div>
-              <div class="label-list">
-                <a class="label">crystal</a>
-                <a class="label">crystal-lang</a>
-                <a class="label">redis</a>
-                <a class="label">redis-client</a>
-                <a class="label">redis-cluster</a>
-              </div>
-              <div class="flex-item-body">Updated 2 days ago</div>
-            </div>
-          </div>
         </div>
 
-      </div>
-
-      <!-- Right sidebar (5 wide) -->
-      <div class="ui five wide">
-        <!-- Members section -->
-        <div class="sidebar-section">
-          <h4>
-            Members
-            <a href="#">1 <svg class="svg" width="12" height="12" viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06z"/></svg></a>
-          </h4>
-          <div class="flex-list members" style="display: flex; flex-wrap: wrap; gap: 4px;">
-            <div class="flex-item" style="padding: 0;">
-              <a href="#"><img class="ui avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%23238636' rx='16'/%3E%3Ctext x='16' y='21' text-anchor='middle' fill='white' font-size='14'%3EAA%3C/text%3E%3C/svg%3E" width="32" height="32" style="border-radius: 50%;"></a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Teams section -->
-        <div class="sidebar-section" style="border-top: 1px solid var(--color-light-border); padding-top: 16px;">
-          <h4>
-            Teams
-            <a href="#">1 <svg class="svg" width="12" height="12" viewBox="0 0 16 16"><path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06z"/></svg></a>
-          </h4>
-          <div style="padding: 8px 0;">
-            <div style="font-weight: 600;"><a href="#">Owners</a></div>
-            <div style="font-size: 12px; color: var(--color-text-light-1);">1 members &middot; 1,305 repositories</div>
-          </div>
-          <a href="#" class="ui primary button" style="margin-top: 8px;">New team</a>
-        </div>
       </div>
     </div>
-
   </div>
 </div>
+
+<footer class="page-footer" role="group" aria-label="Footer">
+  <div role="contentinfo">Page: <strong>4ms</strong> Template: <strong>1ms</strong></div>
+  <div>
+    <span class="flex-text-inline"><svg viewBox="0 0 16 16" class="svg octicon-globe" aria-hidden="true" width="14" height="14"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0"/></svg> English</span>
+    <a href="#" style="margin-left:16px;">Licenses</a>
+  </div>
+</footer>
 
 </div>
 </body>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en-US" data-theme="github-dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>octo-demo/hello-world: README.md — Forgejo GitHub Theme Preview</title>
+<link rel="stylesheet" href="../dist/theme-github-dark.css">
+<style>
+html { color-scheme: dark; }
+body { margin: 0; background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc);
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+       font-size: 14px; line-height: 1.5; }
+a { color: var(--color-primary, #4493f8); text-decoration: none; }
+a:hover { text-decoration: underline; }
+svg.svg { display: inline-block; vertical-align: middle; fill: currentColor; }
+img.ui.avatar, .avatar { border-radius: 50%; vertical-align: middle; }
+.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+/* Preview nav */
+.preview-nav { background: #1a1a2e; border-bottom: 2px solid #16213e; padding: 8px 16px; font-size: 13px; position: sticky; top: 0; z-index: 1000; }
+.preview-nav a { color: #a8b2d1; margin-right: 16px; padding: 4px 8px; border-radius: 4px; }
+.preview-nav a:hover, .preview-nav a.active { background: #16213e; color: #ccd6f6; text-decoration: none; }
+.preview-nav .label { font-size: 11px; color: #8892b0; margin-right: 16px; }
+
+/* Base layout fallbacks */
+.full.height { min-height: 100vh; }
+#navbar { display: flex; align-items: center; height: 48px; padding: 0 16px; border-bottom: 1px solid var(--color-secondary, #30363d); background: var(--color-nav-bg, #161b22); }
+#navbar .ui.secondary.menu { display: flex; align-items: center; gap: 8px; }
+#navbar .navbar-left { flex: 1; }
+#navbar .item { padding: 4px 8px; color: var(--color-nav-text, #f0f6fc); border-radius: 6px; }
+#navbar .item.active { font-weight: 600; }
+
+.tw-flex { display: flex; } .tw-items-center { align-items: center; } .tw-gap-1 { gap: 4px; } .tw-gap-2 { gap: 8px; }
+.tw-gap-3 { gap: 12px; } .tw-mr-0 { margin-right: 0; } .tw-mr-2 { margin-right: 8px; } .tw-ml-auto { margin-left: auto; }
+.tw-flex-1 { flex: 1; } .tw-font-semibold { font-weight: 600; } .tw-text-right { text-align: right; }
+
+/* Repo header row */
+.page-content.repository .repo-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 12px; }
+.page-content.repository .repo-header .flex-item-title { display: inline-flex; align-items: center; gap: 4px; font-size: 16px; }
+.page-content.repository .repo-header .flex-item-trailing { display: inline-flex; align-items: center; gap: 8px; }
+.ui.label { display: inline-flex; align-items: center; padding: 0 7px; border-radius: 9999px; font-size: 12px; font-weight: 500; border: 1px solid transparent; line-height: 18px; }
+.ui.basic.label { background: transparent; border: 1px solid var(--color-light-border, #3d444d); color: var(--color-text-light-1); }
+.ui.compact.button { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text, #f0f6fc); cursor: pointer; font-size: 12px; padding: 3px 12px; height: 28px; line-height: 20px; white-space: nowrap; }
+.ui.button { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text, #f0f6fc); cursor: pointer; font-size: 14px; padding: 5px 16px; height: 32px; }
+.ui.primary.button { background: var(--color-primary, #1f6feb); border-color: var(--color-primary, #1f6feb); color: #fff; }
+.ui.labeled.button { display: inline-flex; }
+.ui.labeled.button > .ui.label { border: 1px solid var(--color-light-border, #3d444d); border-left: 0; border-radius: 0 6px 6px 0; background: var(--color-secondary-bg, #21262d); height: 28px; line-height: 20px; padding: 3px 8px; min-width: 28px; text-align: center; font-weight: 600; }
+.ui.labeled.button > .ui.compact.button { border-radius: 6px 0 0 6px; }
+
+/* Secondary nav (tabs) */
+.page-content.repository .repo-header-nav { border-bottom: 1px solid var(--color-secondary, #30363d); margin-bottom: 16px; }
+.page-content.repository .repo-header-nav .ui.menu { display: flex; gap: 4px; overflow-x: auto; }
+.page-content.repository .repo-header-nav .ui.menu .item { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; color: var(--color-text-light-1, #9198a1); border-bottom: 2px solid transparent; }
+.page-content.repository .repo-header-nav .ui.menu .item.active { color: var(--color-text); font-weight: 600; border-bottom-color: var(--color-primary); }
+.page-content.repository .repo-header-nav .ui.menu .item .ui.label, .page-content.repository .repo-header-nav .ui.menu .item .counter { font-size: 11px; padding: 0 7px; background: var(--color-secondary-bg); color: var(--color-text-light-1); border-radius: 9999px; }
+
+/* File frame */
+.file-content { margin-top: 8px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; overflow: hidden; }
+.file-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: var(--color-box-header, #161b22); border-bottom: 1px solid var(--color-light-border, #3d444d); font-size: 13px; }
+.file-header-left { display: inline-flex; align-items: center; gap: 8px; }
+.file-header-right { display: inline-flex; align-items: center; gap: 8px; color: var(--color-text-light-1, #9198a1); font-size: 12px; }
+.file-view.markup { padding: 32px 40px; }
+.muted { color: var(--color-text-light-1); font-size: 13px; display: inline-flex; align-items: center; gap: 4px; }
+
+/* Breadcrumbs above file frame */
+.breadcrumb { display: flex; align-items: center; gap: 4px; font-size: 16px; padding: 8px 0 4px; flex-wrap: wrap; }
+.breadcrumb a { color: var(--color-primary); }
+.breadcrumb .sep { color: var(--color-text-light-1); }
+.breadcrumb .file-name { color: var(--color-text); font-weight: 600; }
+
+/* Footer */
+.page-footer { border-top: 1px solid var(--color-secondary, #30363d); padding: 24px 16px; display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light-1, #9198a1); margin-top: 48px; }
+.placeholder-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #6f42c1, #bc4e99); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+.placeholder-avatar.sm { width: 20px; height: 20px; font-size: 9px; }
+
+/* ---- .markup styling fallbacks (theme drives most of this) ---- */
+.markup { font-size: 16px; line-height: 1.5; word-wrap: break-word; }
+.markup > *:first-child { margin-top: 0 !important; }
+.markup > *:last-child { margin-bottom: 0 !important; }
+.markup h1, .markup h2, .markup h3, .markup h4, .markup h5, .markup h6 { margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; }
+.markup h1 { font-size: 2em; border-bottom: 1px solid var(--color-secondary, #30363d); padding-bottom: 0.3em; }
+.markup h2 { font-size: 1.5em; border-bottom: 1px solid var(--color-secondary, #30363d); padding-bottom: 0.3em; }
+.markup h3 { font-size: 1.25em; }
+.markup h4 { font-size: 1em; }
+.markup h5 { font-size: 0.875em; }
+.markup h6 { font-size: 0.85em; color: var(--color-text-light-1, #9198a1); }
+.markup p { margin: 0 0 16px; }
+.markup a { color: var(--color-primary, #4493f8); }
+.markup strong { font-weight: 600; }
+.markup em { font-style: italic; }
+.markup del { text-decoration: line-through; }
+.markup code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 85%; padding: 0.2em 0.4em; background: rgba(110,118,129,0.4); border-radius: 6px; }
+.markup pre { background: var(--color-markup-code-block, #161b22); padding: 16px; border-radius: 6px; overflow-x: auto; margin: 0 0 16px; font-size: 85%; line-height: 1.45; }
+.markup pre code { background: transparent; padding: 0; border-radius: 0; font-size: 100%; }
+.markup blockquote { border-left: 0.25em solid var(--color-secondary, #30363d); padding: 0 1em; color: var(--color-text-light-1, #9198a1); margin: 0 0 16px; }
+.markup blockquote > :last-child { margin-bottom: 0; }
+.markup ul, .markup ol { margin: 0 0 16px; padding-left: 2em; }
+.markup li + li { margin-top: 0.25em; }
+.markup ul ul, .markup ul ol, .markup ol ul, .markup ol ol { margin: 0; }
+.markup .task-list-item { list-style: none; }
+.markup .task-list-item input[type="checkbox"] { margin: 0 0.5em 0 -1.4em; vertical-align: middle; accent-color: var(--color-primary, #1f6feb); }
+.markup table { border-collapse: collapse; margin: 0 0 16px; display: block; width: max-content; max-width: 100%; overflow-x: auto; }
+.markup table th, .markup table td { border: 1px solid var(--color-light-border, #3d444d); padding: 6px 13px; }
+.markup table th { font-weight: 600; background: var(--color-box-header, #161b22); }
+.markup table tr:nth-child(2n) { background: var(--color-box-header, #161b22); }
+.markup img { max-width: 100%; border-radius: 6px; }
+.markup hr { border: 0; border-top: 1px solid var(--color-secondary, #30363d); height: 0.25em; margin: 24px 0; background: transparent; }
+
+/* Alerts */
+.markup .markdown-alert { padding: 8px 16px; margin: 0 0 16px; border-left: 0.25em solid; border-radius: 0 4px 4px 0; }
+.markup .markdown-alert > :last-child { margin-bottom: 0; }
+.markup .markdown-alert-title { font-weight: 600; margin: 0 0 4px; display: flex; align-items: center; gap: 6px; }
+.markup .markdown-alert-note { border-color: #4493f8; background: rgba(56,139,253,0.08); }
+.markup .markdown-alert-note .markdown-alert-title { color: #4493f8; }
+.markup .markdown-alert-warning { border-color: #d29922; background: rgba(210,153,34,0.08); }
+.markup .markdown-alert-warning .markdown-alert-title { color: #d29922; }
+
+/* Footnotes */
+.markup .footnotes { font-size: 12px; color: var(--color-text-light-1, #9198a1); border-top: 1px solid var(--color-secondary, #30363d); padding-top: 16px; margin-top: 32px; }
+.markup .footnotes ol { padding-left: 1.5em; }
+
+/* Math */
+.markup .math { font-family: 'KaTeX_Math', 'Times New Roman', serif; font-style: italic; }
+.markup .math-display { text-align: center; margin: 16px 0; font-size: 1.15em; }
+
+/* Mermaid placeholder */
+.markup .mermaid { background: var(--color-box-header, #161b22); border: 1px dashed var(--color-light-border, #3d444d); border-radius: 6px; padding: 16px; margin: 0 0 16px; font-family: ui-monospace, monospace; font-size: 12px; color: var(--color-text-light-1, #9198a1); white-space: pre; overflow-x: auto; }
+
+/* Chroma fallbacks (a few colors so the python sample reads as code) */
+.chroma { display: block; }
+.chroma .k, .chroma .kd, .chroma .kn, .chroma .kr { color: #ff7b72; } /* keyword */
+.chroma .nf, .chroma .nb { color: #d2a8ff; } /* function */
+.chroma .nc { color: #ffa657; } /* class */
+.chroma .s, .chroma .s1, .chroma .s2 { color: #a5d6ff; } /* string */
+.chroma .c, .chroma .c1, .chroma .cm { color: #8b949e; font-style: italic; } /* comment */
+.chroma .m, .chroma .mi, .chroma .mf { color: #79c0ff; } /* number */
+.chroma .o { color: #ff7b72; } /* operator */
+.chroma .nt { color: #7ee787; } /* tag */
+.chroma .line { display: block; }
+</style>
+</head>
+<body>
+<nav class="preview-nav">
+  <span class="label">Preview:</span>
+  <a href="index.html">index</a>
+  <a href="dashboard.html">dashboard</a>
+  <a href="explore.html">explore</a>
+  <a href="repo.html">repo</a>
+  <a href="commits.html">commits</a>
+  <a href="diff.html">diff</a>
+  <a href="issues.html">issues</a>
+  <a href="issue-detail.html">issue-detail</a>
+  <a href="pulls.html">pulls</a>
+  <a href="actions.html">actions</a>
+  <a href="releases.html">releases</a>
+  <a href="org.html">org</a>
+  <a href="settings.html">settings</a>
+  <a href="signin.html">signin</a>
+  <a href="markup.html" class="active">markup</a>
+</nav>
+
+<div class="full height">
+
+<nav id="navbar" aria-label="Navigation bar">
+  <div class="navbar-left ui secondary menu">
+    <a class="item" id="navbar-logo" href="/" aria-label="Dashboard">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fd7e14" d="M11 3.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V8l4 2-4 2v4.5c0 .8-.7 1.5-1.5 1.5S11 17.3 11 16.5V13l-4-2 4-2zM21 15c0 2.5-2 4.5-4.5 4.5S12 17.5 12 15s2-4.5 4.5-4.5S21 12.5 21 15z"/></svg>
+    </a>
+    <a class="item" href="/issues">Issues</a>
+    <a class="item" href="/pulls">Pull requests</a>
+    <a class="item" href="/milestones">Milestones</a>
+    <a class="item" href="/explore/repos">Explore</a>
+  </div>
+  <div class="navbar-right ui secondary menu">
+    <a class="item" href="/notifications" aria-label="Notifications">
+      <svg viewBox="0 0 16 16" class="svg octicon-bell" aria-hidden="true" width="16" height="16"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16M3 5a5 5 0 0 1 10 0v2.947q0 .076.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.26.26 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556-.003.01.001.006q0 .003.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007-.003-.01-1.703-2.554a1.75 1.75 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5"/></svg>
+    </a>
+    <div class="ui dropdown jump item" role="menu" aria-label="Create…" tabindex="0">
+      <span class="text">
+        <svg viewBox="0 0 16 16" class="svg octicon-plus" aria-hidden="true" width="16" height="16"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2"/></svg>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+    <div class="ui dropdown jump item" role="menu" aria-label="Profile and settings…" tabindex="0">
+      <span class="text tw-flex tw-items-center">
+        <span class="placeholder-avatar" title="Octo Demo">OD</span>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16" style="margin-left:4px"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- Forgejo viewing a markdown file: .page-content.repository.file.list -->
+<div role="main" aria-label="octo-demo/hello-world: README.md" class="page-content repository file list">
+  <div class="ui container">
+
+    <!-- Repo header -->
+    <div class="repo-header">
+      <div class="flex-item-title">
+        <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+        <a href="/octo-demo" class="muted">octo-demo</a>
+        <span>/</span>
+        <a href="/octo-demo/hello-world" class="tw-font-semibold">hello-world</a>
+        <span class="ui basic label">Public</span>
+      </div>
+      <div class="flex-item-trailing">
+        <div class="ui labeled button">
+          <button class="ui compact button">
+            <svg viewBox="0 0 16 16" class="svg octicon-eye" aria-hidden="true" width="16" height="16"><path d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2M8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10"/></svg>
+            Watch
+          </button>
+          <a class="ui basic label">5</a>
+        </div>
+        <div class="ui labeled button">
+          <button class="ui compact button">
+            <svg viewBox="0 0 16 16" class="svg octicon-repo-forked" aria-hidden="true" width="16" height="16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0"/></svg>
+            Fork
+          </button>
+          <a class="ui basic label">12</a>
+        </div>
+        <div class="ui labeled button">
+          <button class="ui compact button">
+            <svg viewBox="0 0 16 16" class="svg octicon-star" aria-hidden="true" width="16" height="16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25"/></svg>
+            Star
+          </button>
+          <a class="ui basic label">128</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Repo tabs -->
+    <div class="repo-header-nav">
+      <overflow-menu class="ui secondary pointing tabular top attached borderless menu navbar">
+        <div class="overflow-menu-items">
+          <a class="active item" href="/octo-demo/hello-world">
+            <svg viewBox="0 0 16 16" class="svg octicon-code" aria-hidden="true" width="16" height="16"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.75.75 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215m-6.56 0a.75.75 0 0 1 0 1.06L1 8.22a.75.75 0 0 0 0 .56l3.72 3.72a.749.749 0 1 1-1.06 1.06L-.28 9.28a.75.75 0 0 1 0-1.06L3.66 3.22a.75.75 0 0 1 1.06 0"/></svg>
+            Code
+          </a>
+          <a class="item" href="/octo-demo/hello-world/issues">
+            <svg viewBox="0 0 16 16" class="svg octicon-issue-opened" aria-hidden="true" width="16" height="16"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0"/></svg>
+            Issues <span class="ui label">3</span>
+          </a>
+          <a class="item" href="/octo-demo/hello-world/pulls">
+            <svg viewBox="0 0 16 16" class="svg octicon-git-pull-request" aria-hidden="true" width="16" height="16"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25"/></svg>
+            Pull requests <span class="ui label">1</span>
+          </a>
+          <a class="item" href="/octo-demo/hello-world/actions">
+            <svg viewBox="0 0 16 16" class="svg octicon-play" aria-hidden="true" width="16" height="16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0"/></svg>
+            Actions
+          </a>
+          <a class="item" href="/octo-demo/hello-world/releases">
+            <svg viewBox="0 0 16 16" class="svg octicon-tag" aria-hidden="true" width="16" height="16"><path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.75 1.75 0 0 1 1 7.775"/></svg>
+            Releases <span class="ui label">3</span>
+          </a>
+          <a class="item" href="/octo-demo/hello-world/activity">
+            <svg viewBox="0 0 16 16" class="svg octicon-pulse" aria-hidden="true" width="16" height="16"><path d="M6 2a.75.75 0 0 1 .696.471L10 10.731l1.304-3.26A.75.75 0 0 1 12 7h3.25a.75.75 0 0 1 0 1.5h-2.742l-1.812 4.528a.75.75 0 0 1-1.392 0L6 4.77 4.696 8.03A.75.75 0 0 1 4 8.5H.75a.75.75 0 0 1 0-1.5h2.742l1.812-4.529A.75.75 0 0 1 6 2"/></svg>
+            Activity
+          </a>
+        </div>
+      </overflow-menu>
+    </div>
+
+    <!-- Breadcrumb above the file -->
+    <div class="breadcrumb">
+      <svg viewBox="0 0 16 16" class="svg octicon-file" aria-hidden="true" width="16" height="16"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Z"/></svg>
+      <a href="/octo-demo/hello-world">hello-world</a>
+      <span class="sep">/</span>
+      <span class="file-name">README.md</span>
+    </div>
+
+    <!-- File frame: .file-content > .file-header + .file-view.markup -->
+    <div class="file-content">
+      <div class="file-header">
+        <div class="file-header-left">
+          <svg viewBox="0 0 16 16" class="svg octicon-book" aria-hidden="true" width="16" height="16"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.74 3.74 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Z"/></svg>
+          <strong>README.md</strong>
+          <span class="muted">214 lines · 6.8 KB</span>
+        </div>
+        <div class="file-header-right">
+          <button class="ui compact button">Raw</button>
+          <button class="ui compact button">Blame</button>
+          <button class="ui compact button">History</button>
+        </div>
+      </div>
+
+      <div class="file-view markup">
+
+        <h1 id="hello-world">hello-world</h1>
+        <p>A tiny <strong>greeting-server</strong> used as the working example in the onboarding docs. Accepts a name, returns a <em>polite</em> wave in whatever language the client's <code>Accept-Language</code> header asks for. Some of the older endpoints are <del>deprecated</del> still around for now. Source: <a href="#">/src/server.py</a>.</p>
+
+        <h2 id="contents">Contents</h2>
+        <ul>
+          <li><a href="#install">Install</a></li>
+          <li><a href="#usage">Usage</a>
+            <ul>
+              <li><a href="#cli">From the CLI</a></li>
+              <li><a href="#http">Over HTTP</a>
+                <ul>
+                  <li>Defaults</li>
+                  <li>Custom routes</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#license">License</a></li>
+        </ul>
+
+        <h3 id="install">Install</h3>
+        <p>Pin a tagged release. Master is fine for the brave.</p>
+        <ol>
+          <li>Clone or download the source.</li>
+          <li>Install dependencies with <code>pip install -e .</code>.</li>
+          <li>Run the server (see below).</li>
+        </ol>
+
+        <h4 id="cli">From the CLI</h4>
+        <pre class="chroma"><code class="language-python"><span class="line"><span class="kn">import</span> <span class="nn">argparse</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">hello_world</span> <span class="kn">import</span> <span class="n">wave</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span><span class="line">    <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+</span><span class="line">    <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">"?"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">"world"</span><span class="p">)</span>
+</span><span class="line">    <span class="n">args</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+</span><span class="line">    <span class="c1"># politely wave, never shout</span>
+</span><span class="line">    <span class="nb">print</span><span class="p">(</span><span class="n">wave</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+</span></code></pre>
+
+        <h5 id="http">Over HTTP</h5>
+        <p>Curl-friendly. Returns plain text with a trailing newline because some terminals are picky.</p>
+        <pre class="chroma"><code class="language-bash"><span class="line"><span class="c1"># start the server</span>
+</span><span class="line"><span class="nb">python</span> -m hello_world --port <span class="m">8080</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># in another terminal</span>
+</span><span class="line">curl <span class="s1">'http://localhost:8080/?name=Alex'</span>
+</span><span class="line"><span class="c">#</span> <span class="o">=&gt;</span> Hi Alex, waves politely.
+</span></code></pre>
+
+        <h6 id="advanced">A note for the curious</h6>
+        <p>Yes, the server is just a wrapper around <code>print</code>. That's the joke.</p>
+
+        <h3>Inline elements</h3>
+        <p>You can mix <strong>bold</strong>, <em>italic</em>, <strong><em>both</em></strong>, <del>strikethrough</del>, <code>inline code</code>, and <a href="#">a link</a> in a single sentence. Don't, but you can. Use <kbd>Ctrl</kbd>+<kbd>C</kbd> to give up.</p>
+
+        <h3>Quotes</h3>
+        <blockquote>
+          <p>The Answer to the Great Question, of Life, the Universe and Everything is forty-two. Said the computer, with infinite majesty and calm.</p>
+          <blockquote>
+            <p>Forty-two? — yelled Loonquawl. — Is that all you've got to show for seven and a half million years' work?</p>
+          </blockquote>
+        </blockquote>
+
+        <h3>Lists</h3>
+        <p>Unordered, with two levels of nesting:</p>
+        <ul>
+          <li>plain item
+            <ul>
+              <li>nested item
+                <ul>
+                  <li>deeply nested item — for the truly committed</li>
+                </ul>
+              </li>
+              <li>another nested</li>
+            </ul>
+          </li>
+          <li>second top-level</li>
+        </ul>
+
+        <p>Ordered:</p>
+        <ol>
+          <li>do the thing</li>
+          <li>verify the thing happened</li>
+          <li>document the thing for next quarter's you</li>
+        </ol>
+
+        <p>Task list:</p>
+        <ul>
+          <li class="task-list-item"><input type="checkbox" checked disabled> wire up the greeting</li>
+          <li class="task-list-item"><input type="checkbox" checked disabled> add tests</li>
+          <li class="task-list-item"><input type="checkbox" disabled> i18n for at least three languages</li>
+          <li class="task-list-item"><input type="checkbox" disabled> remove the deprecated <code>/hello</code> route (someday)</li>
+        </ul>
+
+        <h3>JavaScript example</h3>
+        <pre class="chroma"><code class="language-javascript"><span class="line"><span class="c1">// minimal client</span>
+</span><span class="line"><span class="kd">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">fetch</span><span class="p">(</span><span class="s1">'/?name=Trillian'</span><span class="p">);</span>
+</span><span class="line"><span class="kd">const</span> <span class="nx">text</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">res</span><span class="p">.</span><span class="nf">text</span><span class="p">();</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span> <span class="c1">// "Hi Trillian, waves politely."</span>
+</span></code></pre>
+
+        <h3>Math</h3>
+        <p>The greeting throughput is roughly <span class="math">T = N / L</span>, where <span class="math">N</span> is the request rate and <span class="math">L</span> is the latency. In display form:</p>
+        <div class="math-display">T<sub>max</sub> = (C<sub>cores</sub> · N) / L<sub>avg</sub></div>
+
+        <h3>Tables</h3>
+        <table>
+          <thead>
+            <tr><th>Endpoint</th><th>Method</th><th>Returns</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>/</code></td><td>GET</td><td>plain text greeting</td></tr>
+            <tr><td><code>/json</code></td><td>GET</td><td>same, but as JSON</td></tr>
+            <tr><td><code>/healthz</code></td><td>GET</td><td><code>ok</code></td></tr>
+            <tr><td><code>/hello</code></td><td>GET</td><td>deprecated; redirects to <code>/</code></td></tr>
+          </tbody>
+        </table>
+
+        <hr>
+
+        <h3>Image</h3>
+        <p>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='160' viewBox='0 0 600 160'%3E%3Crect fill='%23161b22' width='600' height='160' rx='8'/%3E%3Ctext fill='%239198a1' x='300' y='88' text-anchor='middle' font-family='monospace' font-size='16'%3Ehello-world architecture (placeholder)%3C/text%3E%3C/svg%3E" alt="Architecture diagram placeholder for hello-world: client sends a request, server waves back politely.">
+        </p>
+
+        <h3>Mermaid diagram</h3>
+        <div class="mermaid">flowchart LR
+  client([client]) -->|GET /?name=Trillian| server[hello-world]
+  server -->|wave(name)| greeter[(greeter)]
+  greeter --> server
+  server -->|"Hi Trillian, waves politely."| client</div>
+
+        <h3>Alerts</h3>
+        <div class="markdown-alert markdown-alert-note">
+          <p class="markdown-alert-title">
+            <svg viewBox="0 0 16 16" class="svg octicon-info" aria-hidden="true" width="16" height="16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13M6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75M8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/></svg>
+            Note
+          </p>
+          <p>The <code>--port</code> flag defaults to <code>8080</code> because nobody can remember <code>3000</code> at 11pm.</p>
+        </div>
+        <div class="markdown-alert markdown-alert-warning">
+          <p class="markdown-alert-title">
+            <svg viewBox="0 0 16 16" class="svg octicon-alert" aria-hidden="true" width="16" height="16"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368ZM8 5a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-1.5 0v-2.5A.75.75 0 0 1 8 5m1 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/></svg>
+            Warning
+          </p>
+          <p>Don't run this in production. There is no auth, no rate limiting, and the wave is not legally binding.</p>
+        </div>
+
+        <p>You can also reference a footnote inline<sup id="ref1"><a href="#fn1">[1]</a></sup> for clarifications that nobody will read.</p>
+
+        <hr>
+
+        <h2 id="license">License</h2>
+        <p>MIT. See <code>LICENSE</code>.</p>
+
+        <section class="footnotes">
+          <hr>
+          <ol>
+            <li id="fn1">
+              The footnote you didn't read. <a href="#ref1">↩</a>
+            </li>
+          </ol>
+        </section>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="page-footer" role="group" aria-label="Footer">
+  <div role="contentinfo">Page: <strong>5ms</strong> Template: <strong>2ms</strong></div>
+  <div>
+    <span class="muted"><svg viewBox="0 0 16 16" class="svg octicon-globe" aria-hidden="true" width="14" height="14"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0"/></svg> English</span>
+    <a href="#" style="margin-left:16px;">Licenses</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

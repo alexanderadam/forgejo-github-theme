@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-US" data-theme="github-dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings — Forgejo GitHub Theme Preview</title>
+<link rel="stylesheet" href="../dist/theme-github-dark.css">
+<style>
+/* Minimal Forgejo-ish base only for things the theme stylesheet doesn't set. */
+html { color-scheme: dark; }
+body { margin: 0; background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc);
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+       font-size: 14px; line-height: 1.5; }
+a { color: var(--color-primary, #4493f8); text-decoration: none; }
+a:hover { text-decoration: underline; }
+svg.svg { display: inline-block; vertical-align: middle; fill: currentColor; }
+img.ui.avatar, .avatar { border-radius: 50%; vertical-align: middle; }
+.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+/* Preview-nav */
+.preview-nav { background: #1a1a2e; border-bottom: 2px solid #16213e; padding: 8px 16px; font-size: 13px; position: sticky; top: 0; z-index: 1000; }
+.preview-nav a { color: #a8b2d1; margin-right: 16px; padding: 4px 8px; border-radius: 4px; }
+.preview-nav a:hover, .preview-nav a.active { background: #16213e; color: #ccd6f6; text-decoration: none; }
+.preview-nav .label { font-size: 11px; color: #8892b0; margin-right: 16px; }
+
+/* Layout fallbacks */
+.full.height { min-height: 100vh; }
+#navbar { display: flex; align-items: center; height: 48px; padding: 0 16px; border-bottom: 1px solid var(--color-secondary, #30363d); background: var(--color-nav-bg, #161b22); }
+#navbar .ui.secondary.menu { display: flex; align-items: center; gap: 8px; }
+#navbar .navbar-left { flex: 1; }
+#navbar .item { padding: 4px 8px; color: var(--color-nav-text, #f0f6fc); border-radius: 6px; }
+#navbar .item.active { font-weight: 600; }
+
+.tw-flex { display: flex; } .tw-items-center { align-items: center; } .tw-gap-2 { gap: 8px; }
+.tw-flex-1 { flex: 1; } .tw-font-semibold { font-weight: 600; }
+
+/* Real Forgejo selectors: .page-content.user.settings; layout sidebar + .user-setting-content */
+.page-content.user.settings { padding: 24px 0; }
+.page-content.user.settings > .ui.container > .ui.grid { display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: start; }
+@media (max-width: 768px) { .page-content.user.settings > .ui.container > .ui.grid { grid-template-columns: 1fr; } }
+
+/* Vertical settings nav (real Forgejo class: .ui.vertical.menu inside .four.wide.column on settings) */
+.ui.vertical.menu { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+.ui.vertical.menu .item { display: block; padding: 6px 12px; color: var(--color-text-light-1, #9198a1); font-size: 14px; border-radius: 6px; border-left: 2px solid transparent; }
+.ui.vertical.menu .item:hover { background: var(--color-hover-bg, rgba(177,186,196,0.12)); color: var(--color-text); text-decoration: none; }
+.ui.vertical.menu .item.active { background: var(--color-active-bg, rgba(177,186,196,0.12)); color: var(--color-text); font-weight: 600; border-left-color: var(--color-primary, #fd7e14); }
+.ui.vertical.menu .header.item { font-size: 16px; font-weight: 600; color: var(--color-text); padding: 6px 12px; margin-bottom: 4px; }
+
+/* user-setting-content: the right column */
+.user-setting-content { min-width: 0; }
+
+/* Section headers (.ui.top.attached.header + .ui.attached.segment is the canonical Forgejo card) */
+.user-setting-content .ui.top.attached.header { background: var(--color-box-header, #161b22); border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px 6px 0 0; padding: 8px 16px; margin: 0; font-size: 14px; font-weight: 600; }
+.user-setting-content .ui.attached.segment { border: 1px solid var(--color-light-border, #3d444d); border-top: 0; border-radius: 0 0 6px 6px; padding: 16px; background: var(--color-body, #0d1117); }
+
+/* Real Forgejo .ui.form .field markup */
+.ui.form .field { margin-bottom: 16px; }
+.ui.form .field > label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+.ui.form .field > .help { font-size: 12px; color: var(--color-text-light-1, #9198a1); margin-top: 4px; }
+.ui.form input[type="text"], .ui.form input[type="email"], .ui.form input[type="url"],
+.ui.form select, .ui.form textarea {
+  width: 100%; padding: 5px 12px; min-height: 32px;
+  border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px;
+  background: var(--color-input-bg, #0d1117); color: var(--color-text); font-size: 14px;
+  font-family: inherit; line-height: 20px;
+}
+.ui.form input[readonly] { background: var(--color-input-disabled, #161b22); color: var(--color-text-light-1, #9198a1); }
+.ui.form textarea { min-height: 76px; resize: vertical; line-height: 1.5; padding: 8px 12px; }
+.ui.form input:focus, .ui.form select:focus, .ui.form textarea:focus { outline: none; border-color: var(--color-primary, #4493f8); box-shadow: 0 0 0 3px rgba(31,111,235,0.3); }
+
+.inline.fields { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.inline.fields .field { margin-bottom: 0; display: inline-flex; align-items: center; gap: 6px; }
+.inline.fields .field > label { margin-bottom: 0; font-weight: 400; }
+
+.ui.radio.checkbox, .ui.checkbox { display: inline-flex; align-items: center; gap: 6px; cursor: default; }
+.ui.radio.checkbox input, .ui.checkbox input { accent-color: var(--color-primary, #4493f8); margin: 0; }
+
+/* Buttons */
+.ui.button { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text, #f0f6fc); cursor: pointer; font-size: 14px; padding: 5px 16px; height: 32px; line-height: 20px; font-family: inherit; }
+.ui.button:hover { background: var(--color-button-hover, #30363d); }
+.ui.primary.button { background: var(--color-primary, #1f6feb); border-color: var(--color-primary, #1f6feb); color: #fff; font-weight: 600; }
+
+.divider { height: 1px; background: var(--color-light-border, #3d444d); margin: 16px 0; border: none; }
+
+.placeholder-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #6f42c1, #bc4e99); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+
+.page-footer { border-top: 1px solid var(--color-secondary, #30363d); padding: 24px 16px; display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light-1, #9198a1); margin-top: 48px; }
+.page-footer a { color: var(--color-text-light-1, #9198a1); margin: 0 8px; }
+</style>
+</head>
+<body>
+<nav class="preview-nav">
+  <span class="label">Preview:</span>
+  <a href="index.html">index</a>
+  <a href="dashboard.html">dashboard</a>
+  <a href="explore.html">explore</a>
+  <a href="repo.html">repo</a>
+  <a href="commits.html">commits</a>
+  <a href="diff.html">diff</a>
+  <a href="issues.html">issues</a>
+  <a href="issue-detail.html">issue-detail</a>
+  <a href="pulls.html">pulls</a>
+  <a href="actions.html">actions</a>
+  <a href="releases.html">releases</a>
+  <a href="org.html">org</a>
+  <a href="settings.html" class="active">settings</a>
+  <a href="signin.html">signin</a>
+  <a href="markup.html">markup</a>
+</nav>
+
+<div class="full height">
+
+<nav id="navbar" aria-label="Navigation bar">
+  <div class="navbar-left ui secondary menu">
+    <a class="item" id="navbar-logo" href="/" aria-label="Dashboard">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fd7e14" d="M11 3.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V8l4 2-4 2v4.5c0 .8-.7 1.5-1.5 1.5S11 17.3 11 16.5V13l-4-2 4-2zM21 15c0 2.5-2 4.5-4.5 4.5S12 17.5 12 15s2-4.5 4.5-4.5S21 12.5 21 15z"/></svg>
+    </a>
+    <a class="item" href="/issues">Issues</a>
+    <a class="item" href="/pulls">Pull requests</a>
+    <a class="item" href="/milestones">Milestones</a>
+    <a class="item" href="/explore/repos">Explore</a>
+  </div>
+  <div class="navbar-right ui secondary menu">
+    <a class="item" href="/notifications" aria-label="Notifications">
+      <svg viewBox="0 0 16 16" class="svg octicon-bell" aria-hidden="true" width="16" height="16"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16M3 5a5 5 0 0 1 10 0v2.947q0 .076.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.26.26 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556-.003.01.001.006q0 .003.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007-.003-.01-1.703-2.554a1.75 1.75 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5"/></svg>
+    </a>
+    <div class="ui dropdown jump item" role="menu" aria-label="Create…" tabindex="0">
+      <span class="text">
+        <svg viewBox="0 0 16 16" class="svg octicon-plus" aria-hidden="true" width="16" height="16"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2"/></svg>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+    <div class="ui dropdown jump item" role="menu" aria-label="Profile and settings…" tabindex="0">
+      <span class="text tw-flex tw-items-center">
+        <span class="placeholder-avatar" title="Octo Demo">OD</span>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16" style="margin-left:4px"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- Real Forgejo: .page-content.user.settings — sidebar + .user-setting-content -->
+<div role="main" aria-label="Settings" class="page-content user settings">
+  <div class="ui container">
+    <div class="ui grid stackable">
+
+      <!-- Sidebar (real Forgejo .four.wide.column wrapping a .ui.fluid.vertical.menu) -->
+      <aside class="ui four wide column">
+        <div class="ui fluid vertical menu">
+          <div class="header item">Settings</div>
+          <a class="active item" href="/user/settings">
+            <svg viewBox="0 0 16 16" class="svg octicon-person" aria-hidden="true" width="16" height="16"><path d="M10.561 8.073a6 6 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6 6 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0M10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0"/></svg>
+            Profile
+          </a>
+          <a class="item" href="/user/settings/account">
+            <svg viewBox="0 0 16 16" class="svg octicon-tools" aria-hidden="true" width="16" height="16"><path d="M5.433 2.304A4.49 4.49 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A6 6 0 0 1 2 6a6 6 0 0 1 2.567-4.92 1.48 1.48 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.25.25 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.48 1.48 0 0 1 1.673.04A6 6 0 0 1 14 6a6 6 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.5 4.5 0 0 0 12.5 6"/></svg>
+            Account
+          </a>
+          <a class="item" href="/user/settings/appearance">
+            <svg viewBox="0 0 16 16" class="svg octicon-paintbrush" aria-hidden="true" width="16" height="16"><path d="M11.134 1.535C9.722 2.562 8.16 4.057 6.889 5.312 5.8 4.882 4.586 5.155 3.78 5.96a.75.75 0 0 0 0 1.06l5.2 5.2a.75.75 0 0 0 1.06 0c.806-.806 1.08-2.02.65-3.108 1.255-1.272 2.75-2.833 3.777-4.246.51-.703.92-1.412 1.131-2.063.21-.65.273-1.342-.072-1.952a.75.75 0 0 0-.282-.282c-.61-.345-1.302-.282-1.952-.072-.65.21-1.36.621-2.063 1.131Zm6.366 5.78L3.61 13.3a.75.75 0 0 0-.314 1.05.75.75 0 0 0 1.05.314l5.985-3.89-.226-.224z"/></svg>
+            Appearance
+          </a>
+          <a class="item" href="/user/settings/security">
+            <svg viewBox="0 0 16 16" class="svg octicon-shield-lock" aria-hidden="true" width="16" height="16"><path d="M7.467.133a1.75 1.75 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.7 1.7 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667Zm.61 1.429a.25.25 0 0 0-.153 0l-5.25 1.68a.25.25 0 0 0-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.2.2 0 0 0 .154 0c2.245-.957 3.582-2.103 4.366-3.297C13.225 9.666 13.5 8.358 13.5 7V3.48a.25.25 0 0 0-.174-.237ZM9 10.5H7V9h2Zm.25-2.75A1.25 1.25 0 0 0 8 6.5a1.25 1.25 0 0 0-1.25 1.25c0 .69.56 1.25 1.25 1.25Z"/></svg>
+            Security
+          </a>
+          <a class="item" href="/user/settings/applications">
+            <svg viewBox="0 0 16 16" class="svg octicon-key" aria-hidden="true" width="16" height="16"><path d="M10.5 0a5.5 5.5 0 1 1-1.288 10.848l-1.292 1.292a.75.75 0 0 1-.53.22H6v.75a.75.75 0 0 1-.75.75H4.5v.75a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75v-2.546a.75.75 0 0 1 .22-.531l5.082-5.082A5.5 5.5 0 0 1 10.5 0m0 1.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8M11 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
+            Applications
+          </a>
+          <a class="item" href="/user/settings/organization">
+            <svg viewBox="0 0 16 16" class="svg octicon-organization" aria-hidden="true" width="16" height="16"><path d="M1.75 16A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0h8.5C11.216 0 12 .784 12 1.75v12.5q0 .127-.018.25h2.268a.25.25 0 0 0 .25-.25V8.285a.25.25 0 0 0-.111-.208l-1.055-.703a.749.749 0 1 1 .832-1.248l1.055.703c.487.325.779.871.779 1.456v5.965A1.75 1.75 0 0 1 14.25 16h-3.5a.8.8 0 0 1-.197-.026q-.148.026-.303.026h-3a.75.75 0 0 1-.75-.75V14h-1v1.25a.75.75 0 0 1-.75.75Z"/></svg>
+            Organizations
+          </a>
+          <a class="item" href="/user/settings/repos">
+            <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8Z"/></svg>
+            Repositories
+          </a>
+          <a class="item" href="/user/settings/packages">
+            <svg viewBox="0 0 16 16" class="svg octicon-package" aria-hidden="true" width="16" height="16"><path d="m8.878.392 5.25 3.045c.54.314.872.89.872 1.514v6.098a1.75 1.75 0 0 1-.872 1.514l-5.25 3.045a1.75 1.75 0 0 1-1.756 0l-5.25-3.045A1.75 1.75 0 0 1 1 11.049V4.951c0-.624.332-1.2.872-1.514L7.122.392a1.75 1.75 0 0 1 1.756 0M7.875 1.69l-4.63 2.685L8 7.133l4.755-2.758-4.63-2.685a.25.25 0 0 0-.25 0M2.5 5.677v5.372c0 .09.047.171.125.216l4.625 2.683V8.432Zm6.25 8.271 4.625-2.683a.25.25 0 0 0 .125-.216V5.677L8.75 8.432Z"/></svg>
+            Packages
+          </a>
+          <a class="item" href="/user/notifications">
+            <svg viewBox="0 0 16 16" class="svg octicon-bell" aria-hidden="true" width="16" height="16"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16M3 5a5 5 0 0 1 10 0v2.947q0 .076.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.26.26 0 0 0 3 7.947Z"/></svg>
+            Notifications
+          </a>
+          <a class="item" href="/user/settings/keys">
+            <svg viewBox="0 0 16 16" class="svg octicon-key" aria-hidden="true" width="16" height="16"><path d="M10.5 0a5.5 5.5 0 1 1-1.288 10.848l-1.292 1.292a.75.75 0 0 1-.53.22H6v.75a.75.75 0 0 1-.75.75H4.5v.75a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75v-2.546a.75.75 0 0 1 .22-.531l5.082-5.082A5.5 5.5 0 0 1 10.5 0"/></svg>
+            SSH / GPG keys
+          </a>
+          <a class="item" href="/user/settings/hooks">
+            <svg viewBox="0 0 16 16" class="svg octicon-broadcast" aria-hidden="true" width="16" height="16"><path d="M8.75 8.582v5.668a.75.75 0 0 1-1.5 0V8.582a1.75 1.75 0 1 1 1.5 0M3.07 3.012A6.97 6.97 0 0 0 1 7.926c-.006 1.846.717 3.62 2.012 4.937a.75.75 0 1 1-1.07 1.052A8.47 8.47 0 0 1-.5 7.92a8.47 8.47 0 0 1 2.51-5.97.75.75 0 1 1 1.06 1.061m9.86 1.06A6.97 6.97 0 0 1 15 7.926c.006 1.846-.717 3.62-2.012 4.937a.75.75 0 0 0 1.07 1.052A8.47 8.47 0 0 0 16.5 7.92a8.47 8.47 0 0 0-2.51-5.97.75.75 0 0 0-1.06 1.061M5.18 5.18A4 4 0 0 0 4 8c-.002 1.06.413 2.078 1.156 2.834a.75.75 0 1 1-1.07 1.052A5.5 5.5 0 0 1 2.5 8a5.5 5.5 0 0 1 1.62-3.89.75.75 0 0 1 1.06 1.07m6.7-1.07A5.5 5.5 0 0 1 13.5 8a5.5 5.5 0 0 1-1.586 3.886.75.75 0 0 1-1.07-1.052A4 4 0 0 0 12 8a4 4 0 0 0-1.18-2.82.75.75 0 0 1 1.06-1.07"/></svg>
+            Webhooks
+          </a>
+        </div>
+      </aside>
+
+      <!-- Right column: .user-setting-content -->
+      <section class="ui twelve wide column user-setting-content">
+
+        <h4 class="ui top attached header">Public profile</h4>
+        <div class="ui attached segment">
+          <form class="ui form" action="/user/settings" method="post">
+
+            <div class="field">
+              <label for="username">Username</label>
+              <input id="username" name="name" type="text" value="octo-demo" readonly>
+              <div class="help">Your username uniquely identifies you across the instance. Contact an admin to change it.</div>
+            </div>
+
+            <div class="field">
+              <label for="full_name">Full name</label>
+              <input id="full_name" name="full_name" type="text" value="Octo Demo" maxlength="100">
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" value="octo-demo@example.invalid">
+              <div class="help">A verified email is required for sign-in and notifications.</div>
+            </div>
+
+            <div class="field">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="url" placeholder="https://example.com" value="">
+            </div>
+
+            <div class="field">
+              <label for="description">Description</label>
+              <textarea id="description" name="description" rows="3" maxlength="255" placeholder="Tell us about yourself…"></textarea>
+              <div class="help">You can @mention other users and #reference repos. Markdown is supported.</div>
+            </div>
+
+            <div class="field">
+              <label for="location">Location</label>
+              <input id="location" name="location" type="text" value="Geneva" maxlength="50">
+            </div>
+
+            <div class="field">
+              <label for="pronouns">Pronouns</label>
+              <select id="pronouns" name="pronouns">
+                <option value="">Don't specify</option>
+                <option value="they/them" selected>they/them</option>
+                <option value="she/her">she/her</option>
+                <option value="he/him">he/him</option>
+                <option value="custom">Custom…</option>
+              </select>
+            </div>
+
+            <hr class="divider">
+
+            <div class="field">
+              <label>Visibility</label>
+              <div class="inline fields" role="radiogroup" aria-label="Visibility">
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input type="radio" name="visibility" id="vis-public" value="public" checked>
+                    <label for="vis-public">Public — anyone on the instance can see your profile.</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input type="radio" name="visibility" id="vis-private" value="private">
+                    <label for="vis-private">Private — only signed-in users you've interacted with.</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="ui primary button" type="submit">Update profile</button>
+          </form>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer" role="group" aria-label="Footer">
+  <div role="contentinfo">Page: <strong>4ms</strong> Template: <strong>1ms</strong></div>
+  <div>
+    <span><svg viewBox="0 0 16 16" class="svg octicon-globe" aria-hidden="true" width="14" height="14"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0"/></svg> English</span>
+    <a href="#" style="margin-left:16px;">Licenses</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
