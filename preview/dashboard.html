@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en-US" data-theme="github-dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Forgejo GitHub Theme Preview</title>
+<link rel="stylesheet" href="../dist/theme-github-dark.css">
+<style>
+html { color-scheme: dark; }
+body { margin: 0; background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc);
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+       font-size: 14px; line-height: 1.5; }
+a { color: var(--color-primary, #4493f8); text-decoration: none; }
+a:hover { text-decoration: underline; }
+svg.svg { display: inline-block; vertical-align: middle; fill: currentColor; }
+img.ui.avatar { border-radius: 50%; }
+.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+.preview-nav { background: #1a1a2e; border-bottom: 2px solid #16213e; padding: 8px 16px; font-size: 13px; position: sticky; top: 0; z-index: 1000; }
+.preview-nav a { color: #a8b2d1; margin-right: 16px; padding: 4px 8px; border-radius: 4px; }
+.preview-nav a:hover, .preview-nav a.active { background: #16213e; color: #ccd6f6; text-decoration: none; }
+.preview-nav .label { font-size: 11px; color: #8892b0; margin-right: 16px; }
+
+.full.height { min-height: 100vh; }
+#navbar { display: flex; align-items: center; height: 48px; padding: 0 16px; border-bottom: 1px solid var(--color-secondary, #30363d); background: var(--color-nav-bg, #161b22); }
+#navbar .ui.secondary.menu { display: flex; align-items: center; gap: 8px; }
+#navbar .navbar-left { flex: 1; }
+#navbar .item { padding: 4px 8px; color: var(--color-nav-text, #f0f6fc); border-radius: 6px; }
+#navbar .item.active { font-weight: 600; }
+
+.secondary-nav { padding: 8px 16px; border-bottom: 1px solid var(--color-secondary, #30363d); }
+.secondary-nav .ui.secondary.menu { display: flex; align-items: center; }
+.secondary-nav .item { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; }
+.truncated-item-name { font-weight: 600; }
+
+.flex-container { display: grid; grid-template-columns: 1fr 320px; gap: 16px; padding: 16px 0; }
+.flex-container-main { min-width: 0; }
+.flex-container-sidebar { min-width: 0; }
+
+.tabs-with-labels { display: flex; border-bottom: 1px solid var(--color-secondary, #30363d); }
+.tabs-with-labels .item { padding: 8px 12px; cursor: default; border-bottom: 2px solid transparent; color: var(--color-text-light-1, #9198a1); }
+.tabs-with-labels .item.active { border-bottom-color: var(--color-primary, #4493f8); color: var(--color-text); font-weight: 600; }
+.ui.grey.label { display: inline-block; background: var(--color-secondary-bg, #21262d); border-radius: 9999px; font-size: 11px; padding: 1px 7px; color: var(--color-text-light-1, #9198a1); }
+.ui.circular.mini.grey.label { display: inline-block; background: var(--color-secondary-bg, #21262d); border-radius: 9999px; font-size: 11px; padding: 1px 7px; color: var(--color-text-light-1, #9198a1); }
+
+.repos-search { padding: 0; margin-top: 8px; }
+.repos-filter { display: flex; padding: 4px 0 0; border-bottom: 1px solid var(--color-secondary, #30363d); margin: 8px 0; }
+.repos-filter .overflow-menu-items { display: flex; gap: 4px; flex: 1; }
+.repos-filter .item { display: inline-flex; align-items: center; gap: 4px; padding: 6px 8px; border-bottom: 2px solid transparent; color: var(--color-text-light-1); cursor: default; }
+.repos-filter .item.active { border-bottom-color: var(--color-primary); color: var(--color-text); font-weight: 600; }
+
+.sidebar-repos { display: flex; flex-direction: column; }
+.sidebar-repos > .item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--color-light-border, #3d444d); font-size: 13px; }
+.sidebar-repos > .item:last-child { border-bottom: none; }
+.sidebar-repos .flex-1 { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-repos .muted { color: var(--color-text-light-1); font-size: 12px; }
+
+/* Dashboard repo-search input (left-icon style) */
+.ui.small.fluid.action.left.icon.input { display: flex; align-items: center; gap: 6px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-input-background, #0d1117); padding: 0 8px; height: 32px; }
+.ui.small.fluid.action.left.icon.input input { border: 0; background: transparent; flex: 1; color: var(--color-text); padding: 0 4px; height: 100%; outline: none; }
+.ui.small.fluid.action.left.icon.input .icon { color: var(--color-text-light-1); display: inline-flex; }
+
+/* Feed items */
+.flex-list#activity-feed .flex-item { display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--color-light-border, #3d444d); }
+.flex-list#activity-feed .flex-item:last-child { border-bottom: none; }
+.flex-list#activity-feed .flex-item-main { flex: 1; min-width: 0; }
+.flex-list#activity-feed .flex-item-header { display: flex; align-items: baseline; gap: 4px; }
+.flex-list#activity-feed .muted { color: var(--color-text-light-1); font-size: 12px; }
+.flex-list#activity-feed .flex-item-body { margin-top: 4px; }
+.flex-text-inline { display: inline-flex; align-items: center; gap: 4px; }
+
+.page-footer { border-top: 1px solid var(--color-secondary, #30363d); padding: 24px 16px; display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light-1, #9198a1); margin-top: 48px; }
+.page-footer a { color: var(--color-text-light-1, #9198a1); margin: 0 8px; }
+
+.placeholder-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #6f42c1, #bc4e99); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+.placeholder-avatar.lg { width: 28px; height: 28px; font-size: 11px; }
+.placeholder-avatar.alice { background: linear-gradient(135deg, #2ea043, #1f6feb); }
+.placeholder-avatar.bob { background: linear-gradient(135deg, #fb8500, #d9480f); }
+.placeholder-avatar.carol { background: linear-gradient(135deg, #a371f7, #e3b341); }
+
+.ui.horizontal.label { display: inline-block; background: transparent; border: 1px solid var(--color-light-border); border-radius: 9999px; font-size: 11px; padding: 1px 7px; color: var(--color-text-light-1); margin-left: 4px; }
+</style>
+</head>
+<body>
+<nav class="preview-nav">
+  <span class="label">Preview:</span>
+  <a href="index.html">index</a>
+  <a href="dashboard.html" class="active">dashboard</a>
+  <a href="explore.html">explore</a>
+  <a href="repo.html">repo</a>
+  <a href="commits.html">commits</a>
+  <a href="diff.html">diff</a>
+  <a href="issues.html">issues</a>
+  <a href="issue-detail.html">issue-detail</a>
+  <a href="pulls.html">pulls</a>
+  <a href="actions.html">actions</a>
+  <a href="releases.html">releases</a>
+  <a href="org.html">org</a>
+  <a href="settings.html">settings</a>
+  <a href="signin.html">signin</a>
+  <a href="markup.html">markup</a>
+</nav>
+
+<div class="full height">
+
+<nav id="navbar" aria-label="Navigation bar">
+  <div class="navbar-left ui secondary menu">
+    <a class="item" id="navbar-logo" href="/" aria-label="Dashboard">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fd7e14" d="M11 3.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V8l4 2-4 2v4.5c0 .8-.7 1.5-1.5 1.5S11 17.3 11 16.5V13l-4-2 4-2zM21 15c0 2.5-2 4.5-4.5 4.5S12 17.5 12 15s2-4.5 4.5-4.5S21 12.5 21 15z"/></svg>
+    </a>
+    <a class="item" href="/issues">Issues</a>
+    <a class="item" href="/pulls">Pull requests</a>
+    <a class="item" href="/milestones">Milestones</a>
+    <a class="item" href="/explore/repos">Explore</a>
+  </div>
+  <div class="navbar-right ui secondary menu">
+    <a class="item" href="/notifications" aria-label="Notifications">
+      <svg viewBox="0 0 16 16" class="svg octicon-bell" aria-hidden="true" width="16" height="16"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16M3 5a5 5 0 0 1 10 0v2.947q0 .076.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.26.26 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556-.003.01.001.006q0 .003.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007-.003-.01-1.703-2.554a1.75 1.75 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5"/></svg>
+    </a>
+    <div class="ui dropdown jump item" role="menu" aria-label="Create…" tabindex="0">
+      <span class="text">
+        <svg viewBox="0 0 16 16" class="svg octicon-plus" aria-hidden="true" width="16" height="16"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2"/></svg>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+    <div class="ui dropdown jump item" role="menu" aria-label="Profile and settings…" tabindex="0">
+      <span class="text tw-flex tw-items-center">
+        <span class="placeholder-avatar" title="Octo Demo">OD</span>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16" style="margin-left:4px"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<div role="main" aria-label="Octo Demo - Dashboard" class="page-content dashboard feeds">
+
+  <div class="secondary-nav tw-border-b tw-border-b-secondary">
+    <div class="ui secondary stackable menu">
+      <div class="item">
+        <div class="ui floating dropdown jump" role="menu" tabindex="0">
+          <span class="text truncated-item-container">
+            <span class="placeholder-avatar lg" title="Octo Demo">OD</span>
+            <span class="truncated-item-name">octo-demo</span>
+            <span class="org-visibility">
+              <div class="ui horizontal label">Private</div>
+            </span>
+            <svg viewBox="0 0 16 16" class="dropdown icon svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui container flex-container">
+    <div class="flex-container-main">
+
+      <!-- tiny fabricated heatmap strip (visual placeholder for Forgejo's heatmap; real one uses
+           #user-heatmap with per-day squares). Good enough for theme review. -->
+      <div id="user-heatmap" style="display:flex;justify-content:flex-end;padding:8px 0;margin-bottom:8px;">
+        <div style="display:grid;grid-template-columns:repeat(12,10px);grid-auto-rows:10px;gap:2px;">
+          <i style="background:#161b22;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i>
+          <i style="background:#006d32;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i>
+          <i style="background:#006d32;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i>
+          <i style="background:#0e4429;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i>
+          <i style="background:#0e4429;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i>
+          <i style="background:#0e4429;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i>
+          <i style="background:#39d353;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i><i style="background:#161b22;border-radius:2px;"></i><i style="background:#006d32;border-radius:2px;"></i><i style="background:#39d353;border-radius:2px;"></i><i style="background:#26a641;border-radius:2px;"></i><i style="background:#0e4429;border-radius:2px;"></i>
+        </div>
+      </div>
+
+      <div class="flex-list" id="activity-feed">
+
+        <div class="flex-item">
+          <div class="flex-item-leading">
+            <span class="placeholder-avatar" title="Octo Demo">OD</span>
+          </div>
+          <div class="flex-item-main">
+            <div class="flex-item-header">
+              <span><a href="/octo-demo">octo-demo</a> pushed to <a href="/octo-demo/hello-world/src/branch/main">main</a> at <a href="/octo-demo/hello-world">octo-demo/hello-world</a></span>
+              <span class="muted" style="margin-left:auto;">3 hours ago</span>
+            </div>
+            <div class="flex-item-body">
+              <div style="font-family:ui-monospace,SFMono-Regular,monospace;font-size:12px;display:flex;gap:8px;padding:2px 0;">
+                <a href="#">3f2a1b0</a><span>wave nicer when the greeting gets empty</span>
+              </div>
+              <div style="font-family:ui-monospace,SFMono-Regular,monospace;font-size:12px;display:flex;gap:8px;padding:2px 0;">
+                <a href="#">9e5cd42</a><span>drop the exclamation mark, marketing said</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-item">
+          <div class="flex-item-leading">
+            <span class="placeholder-avatar alice" title="Alice">AL</span>
+          </div>
+          <div class="flex-item-main">
+            <div class="flex-item-header">
+              <span><a href="/alice">alice</a> opened issue <a href="/octo-demo/hello-world/issues/42">#42 Greeting drops trailing whitespace</a> at <a href="/octo-demo/hello-world">octo-demo/hello-world</a></span>
+              <span class="muted" style="margin-left:auto;">yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-item">
+          <div class="flex-item-leading">
+            <span class="placeholder-avatar bob" title="Bob">BO</span>
+          </div>
+          <div class="flex-item-main">
+            <div class="flex-item-header">
+              <span><a href="/bob">bob</a> merged pull request <a href="/acme-labs/widget-cli/pulls/17">#17 Use atty instead of isatty</a> at <a href="/acme-labs/widget-cli">acme-labs/widget-cli</a></span>
+              <span class="muted" style="margin-left:auto;">2 days ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-item">
+          <div class="flex-item-leading">
+            <span class="placeholder-avatar" title="Octo Demo">OD</span>
+          </div>
+          <div class="flex-item-main">
+            <div class="flex-item-header">
+              <span><a href="/octo-demo">octo-demo</a> created branch <a href="/octo-demo/hello-world/src/branch/feat-i18n">feat-i18n</a> at <a href="/octo-demo/hello-world">octo-demo/hello-world</a></span>
+              <span class="muted" style="margin-left:auto;">3 days ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-item">
+          <div class="flex-item-leading">
+            <span class="placeholder-avatar carol" title="Carol">CA</span>
+          </div>
+          <div class="flex-item-main">
+            <div class="flex-item-header">
+              <span><a href="/carol">carol</a> starred <a href="/bob/rails-template">bob/rails-template</a></span>
+              <span class="muted" style="margin-left:auto;">4 days ago</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="dashboard-repo-list" class="flex-container-sidebar">
+      <div>
+        <div class="ui secondary stackable menu tabs-with-labels">
+          <a class="item active">Repositories <span class="ui grey label tw-ml-2">4</span></a>
+          <a class="item">Organizations <span class="ui grey label tw-ml-2">1</span></a>
+        </div>
+        <div class="ui tab active list dashboard-repos">
+          <div class="ui top attached segment repos-search">
+            <div class="ui small fluid action left icon input">
+              <i class="icon">
+                <svg viewBox="0 0 16 16" class="svg octicon-search" aria-hidden="true" width="16" height="16"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7"/></svg>
+              </i>
+              <input type="search" spellcheck="false" maxlength="255" placeholder="Search repos…" dir="auto">
+              <div class="ui dropdown icon button" title="Other filters" tabindex="0" role="combobox">
+                <svg viewBox="0 0 16 16" class="svg octicon-filter" aria-hidden="true" width="16" height="16"><path d="M.75 3h14.5a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1 0-1.5M3 7.75A.75.75 0 0 1 3.75 7h8.5a.75.75 0 0 1 0 1.5h-8.5A.75.75 0 0 1 3 7.75m3 4a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75"/></svg>
+              </div>
+            </div>
+          </div>
+          <overflow-menu class="ui secondary pointing tabular borderless menu repos-filter" role="navigation">
+            <div class="overflow-menu-items tw-justify-center">
+              <a class="item active" tabindex="0"><span class="resize-for-semibold" data-text="All">All</span><div class="ui circular mini grey label">4</div></a>
+              <a class="item" tabindex="0"><span class="resize-for-semibold" data-text="Sources">Sources</span></a>
+              <a class="item" tabindex="0"><span class="resize-for-semibold" data-text="Forks">Forks</span></a>
+              <a class="item" tabindex="0"><span class="resize-for-semibold" data-text="Mirrors">Mirrors</span></a>
+            </div>
+          </overflow-menu>
+
+          <div class="sidebar-repos">
+            <div class="item">
+              <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+              <a class="flex-1" href="/octo-demo/hello-world">octo-demo/hello-world</a>
+              <span class="muted">★ 128</span>
+            </div>
+            <div class="item">
+              <svg viewBox="0 0 16 16" class="svg octicon-lock" aria-hidden="true" width="16" height="16"><path d="M4 4a4 4 0 0 1 8 0v2h.25c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 12.25 15h-8.5A1.75 1.75 0 0 1 2 13.25v-5.5C2 6.784 2.784 6 3.75 6H4Zm8.25 3.5h-8.5a.25.25 0 0 0-.25.25v5.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25M10.5 6V4a2.5 2.5 0 1 0-5 0v2Z"/></svg>
+              <a class="flex-1" href="/octo-demo/private-notes">octo-demo/private-notes</a>
+              <span class="muted">6mo</span>
+            </div>
+            <div class="item">
+              <svg viewBox="0 0 16 16" class="svg octicon-repo-forked" aria-hidden="true" width="16" height="16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0"/></svg>
+              <a class="flex-1" href="/octo-demo/logbook-fork">octo-demo/logbook-fork</a>
+              <span class="muted">★ 2</span>
+            </div>
+            <div class="item">
+              <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+              <a class="flex-1" href="/octo-demo/dotfiles">octo-demo/dotfiles</a>
+              <span class="muted">★ 4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="page-footer" role="group" aria-label="Footer">
+  <div class="left-links" role="contentinfo">Page: <strong>4ms</strong> Template: <strong>1ms</strong></div>
+  <div class="right-links" role="group">
+    <span class="flex-text-inline">
+      <svg viewBox="0 0 16 16" class="svg octicon-globe" aria-hidden="true" width="14" height="14"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M5.78 8.75a9.64 9.64 0 0 0 1.363 4.177q.383.64.857 1.215c.245-.296.551-.705.857-1.215A9.64 9.64 0 0 0 10.22 8.75Zm4.44-1.5a9.64 9.64 0 0 0-1.363-4.177c-.307-.51-.612-.919-.857-1.215a10 10 0 0 0-.857 1.215A9.64 9.64 0 0 0 5.78 7.25Zm-5.944 1.5H1.543a6.51 6.51 0 0 0 4.666 5.5q-.184-.271-.352-.552c-.715-1.192-1.437-2.874-1.581-4.948m-2.733-1.5h2.733c.144-2.074.866-3.756 1.58-4.948q.18-.295.353-.552a6.51 6.51 0 0 0-4.666 5.5m10.181 1.5c-.144 2.074-.866 3.756-1.58 4.948q-.18.296-.353.552a6.51 6.51 0 0 0 4.666-5.5Zm2.733-1.5a6.51 6.51 0 0 0-4.666-5.5q.184.272.353.552c.714 1.192 1.436 2.874 1.58 4.948Z"/></svg>
+      English
+    </span>
+    <a href="#">Licenses</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

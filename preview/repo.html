@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en-US" data-theme="github-dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>octo-demo/hello-world — Forgejo GitHub Theme Preview</title>
+<link rel="stylesheet" href="../dist/theme-github-dark.css">
+<style>
+html { color-scheme: dark; }
+body { margin: 0; background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc);
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+       font-size: 14px; line-height: 1.5; }
+a { color: var(--color-primary, #4493f8); text-decoration: none; }
+a:hover { text-decoration: underline; }
+svg.svg { display: inline-block; vertical-align: middle; fill: currentColor; }
+img.ui.avatar, .avatar { border-radius: 50%; vertical-align: middle; }
+.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+/* Preview nav */
+.preview-nav { background: #1a1a2e; border-bottom: 2px solid #16213e; padding: 8px 16px; font-size: 13px; position: sticky; top: 0; z-index: 1000; }
+.preview-nav a { color: #a8b2d1; margin-right: 16px; padding: 4px 8px; border-radius: 4px; }
+.preview-nav a:hover, .preview-nav a.active { background: #16213e; color: #ccd6f6; text-decoration: none; }
+.preview-nav .label { font-size: 11px; color: #8892b0; margin-right: 16px; }
+
+/* Base layout fallbacks */
+.full.height { min-height: 100vh; }
+#navbar { display: flex; align-items: center; height: 48px; padding: 0 16px; border-bottom: 1px solid var(--color-secondary, #30363d); background: var(--color-nav-bg, #161b22); }
+#navbar .ui.secondary.menu { display: flex; align-items: center; gap: 8px; }
+#navbar .navbar-left { flex: 1; }
+#navbar .item { padding: 4px 8px; color: var(--color-nav-text, #f0f6fc); border-radius: 6px; }
+#navbar .item.active { font-weight: 600; }
+
+.tw-flex { display: flex; } .tw-items-center { align-items: center; } .tw-gap-1 { gap: 4px; } .tw-gap-2 { gap: 8px; }
+.tw-gap-3 { gap: 12px; } .tw-mr-0 { margin-right: 0; } .tw-mr-2 { margin-right: 8px; } .tw-ml-auto { margin-left: auto; }
+.tw-flex-1 { flex: 1; } .tw-font-semibold { font-weight: 600; } .tw-text-right { text-align: right; }
+
+/* Repo header row */
+.page-content.repository .repo-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 12px; }
+.page-content.repository .repo-header .flex-item-title { display: inline-flex; align-items: center; gap: 4px; font-size: 16px; }
+.page-content.repository .repo-header .flex-item-trailing { display: inline-flex; align-items: center; gap: 8px; }
+.ui.label { display: inline-flex; align-items: center; padding: 0 7px; border-radius: 9999px; font-size: 12px; font-weight: 500; border: 1px solid transparent; line-height: 18px; }
+.ui.basic.label { background: transparent; border: 1px solid var(--color-light-border, #3d444d); color: var(--color-text-light-1); }
+.ui.compact.button { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text, #f0f6fc); cursor: pointer; font-size: 12px; padding: 3px 12px; height: 28px; line-height: 20px; white-space: nowrap; }
+.ui.button { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; background: var(--color-button, #21262d); color: var(--color-text, #f0f6fc); cursor: pointer; font-size: 14px; padding: 5px 16px; height: 32px; }
+.ui.primary.button { background: var(--color-primary, #1f6feb); border-color: var(--color-primary, #1f6feb); color: #fff; }
+.ui.labeled.button { display: inline-flex; }
+.ui.labeled.button > .ui.label { border: 1px solid var(--color-light-border, #3d444d); border-left: 0; border-radius: 0 6px 6px 0; background: var(--color-secondary-bg, #21262d); height: 28px; line-height: 20px; padding: 3px 8px; min-width: 28px; text-align: center; font-weight: 600; }
+.ui.labeled.button > .ui.compact.button { border-radius: 6px 0 0 6px; }
+
+/* Secondary nav (tabs) */
+.page-content.repository .repo-header-nav { border-bottom: 1px solid var(--color-secondary, #30363d); margin-bottom: 16px; }
+.page-content.repository .repo-header-nav .ui.menu { display: flex; gap: 4px; overflow-x: auto; }
+.page-content.repository .repo-header-nav .ui.menu .item { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; color: var(--color-text-light-1, #9198a1); border-bottom: 2px solid transparent; }
+.page-content.repository .repo-header-nav .ui.menu .item.active { color: var(--color-text); font-weight: 600; border-bottom-color: var(--color-primary); }
+.page-content.repository .repo-header-nav .ui.menu .item .ui.label, .page-content.repository .repo-header-nav .ui.menu .item .counter { font-size: 11px; padding: 0 7px; background: var(--color-secondary-bg); color: var(--color-text-light-1); border-radius: 9999px; }
+
+/* Description + topics */
+.repo-description-wrapper { padding: 8px 0; display: flex; flex-direction: column; gap: 8px; }
+.repo-description { color: var(--color-text-light-1); font-size: 14px; }
+#repo-topics { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px; }
+#repo-topics .ui.label.repo-topic { /* theme handles pill styling */ background: rgba(56,139,253,0.15); color: #58a6ff; font-size: 12px; font-weight: 500; padding: 1px 10px; line-height: 20px; border-radius: 9999px; }
+
+/* Grid: file list + sidebar */
+.repo-grid-filelist-sidebar { display: grid; grid-template-columns: 1fr 280px; gap: 24px; align-items: start; }
+@media (max-width: 900px) { .repo-grid-filelist-sidebar { grid-template-columns: 1fr; } }
+
+/* Repo button row (branch + clone) */
+.repo-button-row { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 16px; align-items: center; }
+.repo-button-row-left { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.repo-button-row-right { display: inline-flex; align-items: center; gap: 8px; }
+.muted { color: var(--color-text-light-1); font-size: 13px; display: inline-flex; align-items: center; gap: 4px; }
+
+/* File list table */
+#repo-files-table { border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; overflow: hidden; }
+#repo-files-table .repo-file-item { display: grid; grid-template-columns: minmax(160px, 1fr) 3fr auto; gap: 16px; align-items: center; padding: 6px 16px; border-bottom: 1px solid var(--color-light-border, #3d444d); font-size: 14px; }
+#repo-files-table .repo-file-item:last-child { border-bottom: none; }
+#repo-files-table .repo-file-header { background: var(--color-box-header, #161b22); font-size: 13px; }
+#repo-files-table .repo-file-cell.name { display: inline-flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#repo-files-table .repo-file-cell.message { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--color-text-light-1); font-size: 13px; }
+#repo-files-table .repo-file-cell.message a { color: var(--color-text-light-1); }
+#repo-files-table .repo-file-cell.age { color: var(--color-text-light-1); font-size: 12px; text-align: right; white-space: nowrap; }
+.icon-folder { color: #54aeff; }
+.icon-file { color: var(--color-text-light-1); }
+
+/* README card */
+#readme { margin-top: 16px; border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; overflow: hidden; }
+#readme .file-header { display: flex; align-items: center; padding: 8px 16px; background: var(--color-box-header, #161b22); border-bottom: 1px solid var(--color-light-border, #3d444d); }
+#readme .file-header-left { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+#readme .markup { padding: 32px; font-size: 15px; line-height: 1.6; }
+#readme .markup h1 { font-size: 2em; font-weight: 600; border-bottom: 1px solid var(--color-secondary); padding-bottom: 8px; margin-bottom: 16px; }
+#readme .markup h2 { font-size: 1.5em; font-weight: 600; border-bottom: 1px solid var(--color-secondary); padding-bottom: 6px; margin: 24px 0 12px; }
+#readme .markup p { margin: 8px 0; }
+#readme .markup code { padding: 0.2em 0.4em; font-size: 85%; background: rgba(110,118,129,0.4); border-radius: 6px; font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace; }
+#readme .markup pre { padding: 16px; overflow: auto; background: var(--color-markup-code-block, #161b22); border-radius: 6px; font-size: 85%; font-family: ui-monospace,SFMono-Regular,monospace; }
+#readme .markup pre code { background: transparent; padding: 0; font-size: 100%; }
+#readme .markup ul { margin-left: 24px; }
+#readme .markup table { border-collapse: collapse; margin: 12px 0; }
+#readme .markup th, #readme .markup td { border: 1px solid var(--color-light-border); padding: 6px 12px; }
+#readme .markup th { background: var(--color-box-header); }
+
+/* Language stats bar */
+.language-stats { margin-top: 16px; }
+.language-stats .bar { display: flex; height: 8px; border-radius: 6px; overflow: hidden; }
+.language-stats .bar > span { display: block; height: 100%; }
+.language-stats-details { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; }
+.language-stats-details .item { display: inline-flex; align-items: center; gap: 4px; }
+.language-stats-details .color { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+
+/* Sidebar (About, Releases, Packages) */
+.repo-home-sidebar-top, .repo-home-sidebar-bottom { display: flex; flex-direction: column; gap: 16px; }
+.repo-home-sidebar-top h4, .repo-home-sidebar-bottom h4 { font-size: 14px; font-weight: 600; margin: 0 0 8px; }
+.sidebar-section { border-bottom: 1px solid var(--color-secondary); padding-bottom: 16px; }
+.sidebar-section:last-child { border-bottom: 0; }
+.sidebar-section .muted { display: block; margin-top: 4px; }
+
+.page-footer { border-top: 1px solid var(--color-secondary, #30363d); padding: 24px 16px; display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light-1, #9198a1); margin-top: 48px; }
+
+.placeholder-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #6f42c1, #bc4e99); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+.placeholder-avatar.sm { width: 20px; height: 20px; font-size: 9px; }
+</style>
+</head>
+<body>
+<nav class="preview-nav">
+  <span class="label">Preview:</span>
+  <a href="index.html">index</a>
+  <a href="dashboard.html">dashboard</a>
+  <a href="explore.html">explore</a>
+  <a href="repo.html" class="active">repo</a>
+  <a href="commits.html">commits</a>
+  <a href="diff.html">diff</a>
+  <a href="issues.html">issues</a>
+  <a href="issue-detail.html">issue-detail</a>
+  <a href="pulls.html">pulls</a>
+  <a href="actions.html">actions</a>
+  <a href="releases.html">releases</a>
+  <a href="org.html">org</a>
+  <a href="settings.html">settings</a>
+  <a href="signin.html">signin</a>
+  <a href="markup.html">markup</a>
+</nav>
+
+<div class="full height">
+
+<nav id="navbar" aria-label="Navigation bar">
+  <div class="navbar-left ui secondary menu">
+    <a class="item" id="navbar-logo" href="/" aria-label="Dashboard">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fd7e14" d="M11 3.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V8l4 2-4 2v4.5c0 .8-.7 1.5-1.5 1.5S11 17.3 11 16.5V13l-4-2 4-2zM21 15c0 2.5-2 4.5-4.5 4.5S12 17.5 12 15s2-4.5 4.5-4.5S21 12.5 21 15z"/></svg>
+    </a>
+    <a class="item" href="/issues">Issues</a>
+    <a class="item" href="/pulls">Pull requests</a>
+    <a class="item" href="/milestones">Milestones</a>
+    <a class="item" href="/explore/repos">Explore</a>
+  </div>
+  <div class="navbar-right ui secondary menu">
+    <a class="item" href="/notifications" aria-label="Notifications">
+      <svg viewBox="0 0 16 16" class="svg octicon-bell" aria-hidden="true" width="16" height="16"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16M3 5a5 5 0 0 1 10 0v2.947q0 .076.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.26.26 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556-.003.01.001.006q0 .003.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007-.003-.01-1.703-2.554a1.75 1.75 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5"/></svg>
+    </a>
+    <div class="ui dropdown jump item" role="menu" aria-label="Create…" tabindex="0">
+      <span class="text">
+        <svg viewBox="0 0 16 16" class="svg octicon-plus" aria-hidden="true" width="16" height="16"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2"/></svg>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+    <div class="ui dropdown jump item" role="menu" aria-label="Profile and settings…" tabindex="0">
+      <span class="text tw-flex tw-items-center">
+        <span class="placeholder-avatar" title="Octo Demo">OD</span>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16" style="margin-left:4px"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- Real Forgejo repo-view page-content. Root class: .page-content.repository.file.list -->
+<div role="main" aria-label="octo-demo/hello-world" class="page-content repository file list">
+  <div class="ui container">
+
+    <!-- Repo header: name + action buttons -->
+    <div class="repo-header">
+      <div class="flex-item-title">
+        <svg viewBox="0 0 16 16" class="svg octicon-repo" aria-hidden="true" width="16" height="16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.5 2.5 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.5 2.5 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+        <a href="/octo-demo" class="muted">octo-demo</a>
+        <span>/</span>
+        <a href="/octo-demo/hello-world" class="tw-font-semibold">hello-world</a>
+        <span class="ui basic label">Public</span>
+      </div>
+      <div class="flex-item-trailing">
+        <div class="ui labeled button">
+          <button class="ui compact button">
+            <svg viewBox="0 0 16 16" class="svg octicon-eye" aria-hidden="true" width="16" height="16"><path d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2M1.679 7.932a.12.12 0 0 0 0 .136c.411.622 1.241 1.75 2.366 2.717C5.176 11.758 6.527 12.5 8 12.5c1.473 0 2.825-.742 3.955-1.715 1.124-.967 1.954-2.096 2.366-2.717a.12.12 0 0 0 0-.136c-.412-.621-1.242-1.75-2.366-2.717C10.824 4.242 9.473 3.5 8 3.5c-1.473 0-2.824.742-3.955 1.715-1.124.967-1.954 2.096-2.366 2.717M8 10a2 2 0 1 1-.001-3.999A2 2 0 0 1 8 10"/></svg>
+            Watch
+          </button>
+          <a class="ui basic label">5</a>
+        </div>
+        <div class="ui labeled button">
+          <button class="ui compact button">
+            <svg viewBox="0 0 16 16" class="svg octicon-repo-forked" aria-hidden="true" width="16" height="16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0"/></svg>
+            Fork
+          </button>
+          <a class="ui basic label">12</a>
+        </div>
+        <div class="ui labeled button">
+          <button class="ui compact button">
+            <svg viewBox="0 0 16 16" class="svg octicon-star" aria-hidden="true" width="16" height="16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25"/></svg>
+            Star
+          </button>
+          <a class="ui basic label">128</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary nav (tabs) -->
+    <div class="repo-header-nav">
+      <overflow-menu class="ui secondary pointing tabular top attached borderless menu navbar">
+        <div class="overflow-menu-items">
+          <a class="active item" href="/octo-demo/hello-world">
+            <svg viewBox="0 0 16 16" class="svg octicon-code" aria-hidden="true" width="16" height="16"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.75.75 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215m-6.56 0a.75.75 0 0 1 0 1.06L1 8.22a.75.75 0 0 0 0 .56l3.72 3.72a.749.749 0 1 1-1.06 1.06L-.28 9.28a.75.75 0 0 1 0-1.06L3.66 3.22a.75.75 0 0 1 1.06 0"/></svg>
+            Code
+          </a>
+          <a class="item" href="/octo-demo/hello-world/issues">
+            <svg viewBox="0 0 16 16" class="svg octicon-issue-opened" aria-hidden="true" width="16" height="16"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0"/></svg>
+            Issues <span class="ui label">3</span>
+          </a>
+          <a class="item" href="/octo-demo/hello-world/pulls">
+            <svg viewBox="0 0 16 16" class="svg octicon-git-pull-request" aria-hidden="true" width="16" height="16"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25m5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354M3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0"/></svg>
+            Pull requests <span class="ui label">1</span>
+          </a>
+          <a class="item" href="/octo-demo/hello-world/actions">
+            <svg viewBox="0 0 16 16" class="svg octicon-play" aria-hidden="true" width="16" height="16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0m4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215"/></svg>
+            Actions
+          </a>
+          <a class="item" href="/octo-demo/hello-world/releases">
+            <svg viewBox="0 0 16 16" class="svg octicon-tag" aria-hidden="true" width="16" height="16"><path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.75 1.75 0 0 1 1 7.775m1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/></svg>
+            Releases <span class="ui label">3</span>
+          </a>
+          <a class="item" href="/octo-demo/hello-world/activity">
+            <svg viewBox="0 0 16 16" class="svg octicon-pulse" aria-hidden="true" width="16" height="16"><path d="M6 2a.75.75 0 0 1 .696.471L10 10.731l1.304-3.26A.75.75 0 0 1 12 7h3.25a.75.75 0 0 1 0 1.5h-2.742l-1.812 4.528a.75.75 0 0 1-1.392 0L6 4.77 4.696 8.03A.75.75 0 0 1 4 8.5H.75a.75.75 0 0 1 0-1.5h2.742l1.812-4.529A.75.75 0 0 1 6 2"/></svg>
+            Activity
+          </a>
+          <a class="item" href="/octo-demo/hello-world/settings">
+            <svg viewBox="0 0 16 16" class="svg octicon-tools" aria-hidden="true" width="16" height="16"><path d="M5.433 2.304A4.49 4.49 0 0 0 3.5 6c0 1.598.832 3.002 2.09 3.802.518.328.929.923.902 1.64v.008l-.164 3.337a.75.75 0 1 1-1.498-.073l.163-3.33c.002-.085-.05-.216-.207-.316A6 6 0 0 1 2 6a6 6 0 0 1 2.567-4.92 1.48 1.48 0 0 1 1.673-.04c.462.296.76.827.76 1.423v2.82c0 .082.041.16.11.206l.75.51a.25.25 0 0 0 .28 0l.75-.51A.25.25 0 0 0 9 5.282V2.463c0-.596.298-1.127.76-1.423a1.48 1.48 0 0 1 1.673.04A6 6 0 0 1 14 6a6 6 0 0 1-2.786 5.068c-.157.1-.209.23-.207.315l.163 3.33a.752.752 0 0 1-1.094.714.75.75 0 0 1-.404-.64l-.164-3.345c-.027-.717.384-1.312.902-1.64A4.5 4.5 0 0 0 12.5 6a4.49 4.49 0 0 0-1.933-3.696c-.024.017-.067.067-.067.16v2.818a1.75 1.75 0 0 1-.767 1.448l-.75.51a1.75 1.75 0 0 1-1.966 0l-.75-.51A1.75 1.75 0 0 1 5.5 5.282V2.463c0-.092-.043-.142-.067-.159"/></svg>
+            Settings
+          </a>
+        </div>
+      </overflow-menu>
+    </div>
+
+    <!-- Description + topics -->
+    <div class="repo-description-wrapper">
+      <div class="repo-description">A tiny greeting-server used as the working example in the onboarding docs. Accepts a name, returns a polite wave.</div>
+    </div>
+    <div id="repo-topics">
+      <a href="/explore/repos?q=onboarding" class="ui label repo-topic">onboarding</a>
+      <a href="/explore/repos?q=docs" class="ui label repo-topic">docs</a>
+      <a href="/explore/repos?q=example" class="ui label repo-topic">example</a>
+      <a href="/explore/repos?q=python" class="ui label repo-topic">python</a>
+    </div>
+
+    <!-- Main grid: file list + sidebar -->
+    <div class="repo-grid-filelist-sidebar">
+
+      <!-- File list column -->
+      <div class="repo-home-filelist">
+
+        <!-- Branch + clone row -->
+        <div class="repo-button-row">
+          <div class="repo-button-row-left">
+            <button class="ui compact button">
+              <svg viewBox="0 0 16 16" class="svg octicon-git-branch" aria-hidden="true" width="16" height="16"><path d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.49 2.49 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25M3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m8.25-.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0"/></svg>
+              main
+              <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+            </button>
+            <span class="muted">
+              <svg viewBox="0 0 16 16" class="svg octicon-git-branch" aria-hidden="true" width="16" height="16"><path d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.49 2.49 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25"/></svg>
+              <strong>4</strong> branches
+            </span>
+            <span class="muted">
+              <svg viewBox="0 0 16 16" class="svg octicon-tag" aria-hidden="true" width="16" height="16"><path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.75 1.75 0 0 1 1 7.775"/></svg>
+              <strong>12</strong> tags
+            </span>
+          </div>
+          <div class="repo-button-row-right">
+            <a class="ui compact button" href="/octo-demo/hello-world/find/main">Go to file</a>
+            <button class="ui primary button clone-panel-button">
+              <svg viewBox="0 0 16 16" class="svg octicon-download" aria-hidden="true" width="16" height="16"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06Z"/></svg>
+              Code
+              <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- File list -->
+        <div id="repo-files-table">
+          <!-- Last-commit header row -->
+          <div class="repo-file-item repo-file-header">
+            <div class="repo-file-cell name">
+              <span class="placeholder-avatar sm" title="octo-demo">OD</span>
+              <a href="/octo-demo">octo-demo</a>
+              <a href="/octo-demo/hello-world/commit/3f2a1b0abcdef0123456789012345678901abcde">wave nicer when the greeting gets empty</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/3f2a1b0">3f2a1b0</a> · 42 Commits</div>
+            <div class="repo-file-cell age">3 hours ago</div>
+          </div>
+
+          <div class="repo-file-item">
+            <div class="repo-file-cell name">
+              <svg viewBox="0 0 16 16" class="svg octicon-file-directory icon-folder" aria-hidden="true" width="16" height="16"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75Z"/></svg>
+              <a href="/octo-demo/hello-world/src/branch/main/.github">.github</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/ae12f98">set up forgejo actions workflow</a></div>
+            <div class="repo-file-cell age">2 weeks ago</div>
+          </div>
+
+          <div class="repo-file-item">
+            <div class="repo-file-cell name">
+              <svg viewBox="0 0 16 16" class="svg octicon-file-directory icon-folder" aria-hidden="true" width="16" height="16"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75Z"/></svg>
+              <a href="/octo-demo/hello-world/src/branch/main/docs">docs</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/1a2b3c4">docs: explain optional name parameter</a></div>
+            <div class="repo-file-cell age">1 month ago</div>
+          </div>
+
+          <div class="repo-file-item">
+            <div class="repo-file-cell name">
+              <svg viewBox="0 0 16 16" class="svg octicon-file-directory icon-folder" aria-hidden="true" width="16" height="16"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75Z"/></svg>
+              <a href="/octo-demo/hello-world/src/branch/main/src">src</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/3f2a1b0">wave nicer when the greeting gets empty</a></div>
+            <div class="repo-file-cell age">3 hours ago</div>
+          </div>
+
+          <div class="repo-file-item">
+            <div class="repo-file-cell name">
+              <svg viewBox="0 0 16 16" class="svg octicon-file-directory icon-folder" aria-hidden="true" width="16" height="16"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75Z"/></svg>
+              <a href="/octo-demo/hello-world/src/branch/main/tests">tests</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/9e5cd42">drop the exclamation mark, marketing said</a></div>
+            <div class="repo-file-cell age">5 hours ago</div>
+          </div>
+
+          <div class="repo-file-item">
+            <div class="repo-file-cell name">
+              <svg viewBox="0 0 16 16" class="svg octicon-file icon-file" aria-hidden="true" width="16" height="16"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"/></svg>
+              <a href="/octo-demo/hello-world/src/branch/main/.gitignore">.gitignore</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/a01b2c3">add __pycache__ and .venv to ignore</a></div>
+            <div class="repo-file-cell age">1 year ago</div>
+          </div>
+
+          <div class="repo-file-item">
+            <div class="repo-file-cell name">
+              <svg viewBox="0 0 16 16" class="svg octicon-file icon-file" aria-hidden="true" width="16" height="16"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Z"/></svg>
+              <a href="/octo-demo/hello-world/src/branch/main/LICENSE">LICENSE</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/init001">initial commit</a></div>
+            <div class="repo-file-cell age">1 year ago</div>
+          </div>
+
+          <div class="repo-file-item">
+            <div class="repo-file-cell name">
+              <svg viewBox="0 0 16 16" class="svg octicon-file icon-file" aria-hidden="true" width="16" height="16"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Z"/></svg>
+              <a href="/octo-demo/hello-world/src/branch/main/README.md">README.md</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/d3f4e5a">readme: mention the wave</a></div>
+            <div class="repo-file-cell age">6 days ago</div>
+          </div>
+
+          <div class="repo-file-item">
+            <div class="repo-file-cell name">
+              <svg viewBox="0 0 16 16" class="svg octicon-file icon-file" aria-hidden="true" width="16" height="16"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Z"/></svg>
+              <a href="/octo-demo/hello-world/src/branch/main/pyproject.toml">pyproject.toml</a>
+            </div>
+            <div class="repo-file-cell message"><a href="/octo-demo/hello-world/commit/c0ffee1">bump python to 3.12</a></div>
+            <div class="repo-file-cell age">2 months ago</div>
+          </div>
+        </div>
+
+        <!-- Language bar (GitHub-style) -->
+        <div class="language-stats">
+          <div class="bar" role="img" aria-label="Languages">
+            <span style="width:82%;background:#3572A5" title="Python 82%"></span>
+            <span style="width:12%;background:#89e051" title="Shell 12%"></span>
+            <span style="width:6%;background:#555555" title="Dockerfile 6%"></span>
+          </div>
+          <div class="language-stats-details">
+            <div class="item"><span class="color" style="background:#3572A5"></span> <span><strong>Python</strong> 82.0%</span></div>
+            <div class="item"><span class="color" style="background:#89e051"></span> <span><strong>Shell</strong> 12.0%</span></div>
+            <div class="item"><span class="color" style="background:#555"></span> <span><strong>Dockerfile</strong> 6.0%</span></div>
+          </div>
+        </div>
+
+        <!-- README -->
+        <div id="readme">
+          <div class="file-header">
+            <div class="file-header-left">
+              <svg viewBox="0 0 16 16" class="svg octicon-book" aria-hidden="true" width="16" height="16"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.74 3.74 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574M8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25"/></svg>
+              <strong>README.md</strong>
+            </div>
+          </div>
+          <div class="markup">
+            <h1>hello-world</h1>
+            <p>A tiny greeting-server used as the working example in the onboarding docs. Accepts a name via a query parameter and returns a polite wave in whatever language the client's <code>Accept-Language</code> header asks for — or English if nobody asked.</p>
+
+            <h2>Quick start</h2>
+            <pre><code>pip install -e .
+python -m hello_world --port 8080</code></pre>
+            <p>Then curl it:</p>
+            <pre><code>curl 'http://localhost:8080/?name=Alex'
+# =&gt; Hi Alex, waves politely.</code></pre>
+
+            <h2>Why does this exist?</h2>
+            <p>Mostly so the onboarding docs have a repo they can link to that's <em>small enough to read in full</em>, but exercises routing, templating, i18n, and CI. If you're looking for a real HTTP framework, start somewhere else.</p>
+
+            <h2>Contributing</h2>
+            <p>PRs welcome. Keep the diff small and the commit messages honest. Tests in <code>tests/</code>, <code>pytest</code> runs them.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="repo-home-sidebar-top">
+        <div class="sidebar-section">
+          <h4>About</h4>
+          <p class="muted" style="display:block; margin-bottom: 12px; font-size: 14px;">A tiny greeting-server used as the working example in the onboarding docs. Accepts a name, returns a polite wave.</p>
+          <div class="muted">
+            <svg viewBox="0 0 16 16" class="svg octicon-link" aria-hidden="true" width="16" height="16"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95Zm-4.69 9.64a2 2 0 0 1 0-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 0 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 0 1-2.83 0Z"/></svg>
+            <a href="#">docs.example.invalid/hello-world</a>
+          </div>
+          <div class="muted" style="display:block; margin-top:4px;">
+            <svg viewBox="0 0 16 16" class="svg octicon-star" aria-hidden="true" width="16" height="16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25"/></svg>
+            128 stars
+          </div>
+          <div class="muted" style="display:block; margin-top:4px;">
+            <svg viewBox="0 0 16 16" class="svg octicon-eye" aria-hidden="true" width="16" height="16"><path d="M8 2c1.981 0 3.671.992 4.933 2.078 1.27 1.091 2.187 2.345 2.637 3.023a1.62 1.62 0 0 1 0 1.798c-.45.678-1.367 1.932-2.637 3.023C11.67 13.008 9.981 14 8 14c-1.981 0-3.671-.992-4.933-2.078C1.797 10.83.88 9.576.43 8.898a1.62 1.62 0 0 1 0-1.798c.45-.677 1.367-1.931 2.637-3.022C4.33 2.992 6.019 2 8 2"/></svg>
+            5 watching
+          </div>
+          <div class="muted" style="display:block; margin-top:4px;">
+            <svg viewBox="0 0 16 16" class="svg octicon-repo-forked" aria-hidden="true" width="16" height="16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0"/></svg>
+            12 forks
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h4>Releases <span class="ui label">3</span></h4>
+          <div class="muted"><strong>v0.4.0</strong> — <span>Latest</span></div>
+          <div class="muted" style="margin-top:2px;">on Mar 20, 2026</div>
+          <a href="/octo-demo/hello-world/releases" style="display:block; margin-top:8px;">+ 2 releases</a>
+        </div>
+
+        <div class="sidebar-section">
+          <h4>Packages</h4>
+          <p class="muted">No packages published</p>
+        </div>
+
+        <div class="sidebar-section">
+          <h4>Languages</h4>
+          <div class="language-stats-details" style="flex-direction:column; gap:4px;">
+            <div class="item"><span class="color" style="background:#3572A5"></span> <span>Python 82.0%</span></div>
+            <div class="item"><span class="color" style="background:#89e051"></span> <span>Shell 12.0%</span></div>
+            <div class="item"><span class="color" style="background:#555"></span> <span>Dockerfile 6.0%</span></div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer" role="group" aria-label="Footer">
+  <div role="contentinfo">Page: <strong>4ms</strong> Template: <strong>1ms</strong></div>
+  <div>
+    <span class="muted"><svg viewBox="0 0 16 16" class="svg octicon-globe" aria-hidden="true" width="14" height="14"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0"/></svg> English</span>
+    <a href="#" style="margin-left:16px;">Licenses</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
