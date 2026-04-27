@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en-US" data-theme="github-dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pull requests — Forgejo GitHub Theme Preview</title>
+<link rel="stylesheet" href="../dist/theme-github-dark.css">
+<style>
+/* Minimal Forgejo-ish base only for what the theme stylesheet doesn't set. */
+html { color-scheme: dark; }
+body { margin: 0; background: var(--color-body, #0d1117); color: var(--color-text, #f0f6fc);
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+       font-size: 14px; line-height: 1.5; }
+a { color: var(--color-primary, #4493f8); text-decoration: none; }
+a:hover { text-decoration: underline; }
+svg.svg { display: inline-block; vertical-align: middle; fill: currentColor; }
+img.ui.avatar, .avatar { border-radius: 50%; vertical-align: middle; }
+.ui.container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+.preview-nav { background: #1a1a2e; border-bottom: 2px solid #16213e; padding: 8px 16px; font-size: 13px; position: sticky; top: 0; z-index: 1000; }
+.preview-nav a { color: #a8b2d1; margin-right: 16px; padding: 4px 8px; border-radius: 4px; }
+.preview-nav a:hover, .preview-nav a.active { background: #16213e; color: #ccd6f6; text-decoration: none; }
+.preview-nav .label { font-size: 11px; color: #8892b0; margin-right: 16px; }
+
+.full.height { min-height: 100vh; }
+#navbar { display: flex; align-items: center; height: 48px; padding: 0 16px; border-bottom: 1px solid var(--color-secondary, #30363d); background: var(--color-nav-bg, #161b22); }
+#navbar .ui.secondary.menu { display: flex; align-items: center; gap: 8px; }
+#navbar .navbar-left { flex: 1; }
+#navbar .item { padding: 4px 8px; color: var(--color-nav-text, #f0f6fc); border-radius: 6px; }
+#navbar .item.active { font-weight: 600; }
+
+.tw-flex { display: flex; } .tw-items-center { align-items: center; } .tw-gap-1 { gap: 4px; } .tw-gap-2 { gap: 8px; }
+.tw-ml-auto { margin-left: auto; } .tw-mx-0 { margin-left: 0; margin-right: 0; }
+.muted { color: var(--color-text-light-1, #9198a1); }
+.ui.label { display: inline-flex; align-items: center; padding: 0 7px; border-radius: 9999px; font-size: 12px; font-weight: 500; border: 1px solid transparent; line-height: 18px; }
+
+/* Dashboard PR-list page top bar (org/user switcher).
+   Real selector: .page-content.dashboard .secondary-nav. */
+.secondary-nav { padding: 8px 16px; border-bottom: 1px solid var(--color-secondary, #30363d); }
+.secondary-nav .ui.secondary.menu { display: flex; align-items: center; }
+.secondary-nav .item { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; }
+.placeholder-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #6f42c1, #bc4e99); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.placeholder-avatar.sm { width: 20px; height: 20px; font-size: 9px; }
+.placeholder-avatar.alice { background: linear-gradient(135deg, #2ea043, #1f6feb); }
+.placeholder-avatar.bob { background: linear-gradient(135deg, #fb8500, #d9480f); }
+.placeholder-avatar.carol { background: linear-gradient(135deg, #a371f7, #e3b341); }
+.truncated-item-name { font-weight: 600; }
+
+/* Dashboard issues/pulls list.
+   Real selectors driven by styles/components/dashboard.ts:
+     .page-content.dashboard.issues > .ui.container > .list-header
+       (with .list-header-toggle on the left, .list-header-filters on the right)
+     and .flex-list#issue-list */
+.list-header { display: flex; align-items: center; padding: 16px 0 8px; gap: 12px; }
+.list-header .switch.list-header-toggle { display: inline-flex; align-items: center; gap: 4px; }
+.list-header .list-header-toggle .item { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; height: 30px; color: var(--color-text-light-1, #9198a1); border-radius: 6px; cursor: default; }
+.list-header .list-header-toggle .item.active { color: var(--color-text); font-weight: 700; }
+.list-header .list-header-filters { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
+.list-header .list-header-filters .item { display: inline-flex; align-items: center; gap: 4px; padding: 0 12px; height: 32px; color: var(--color-text-light-1, #9198a1); border-radius: 6px; cursor: default; }
+
+/* Issue/PR list (also used by dashboard issues/pulls). */
+.flex-list#issue-list { border: 1px solid var(--color-light-border, #3d444d); border-radius: 6px; list-style: none; margin: 0; padding: 0; }
+.flex-list#issue-list > .flex-item { display: flex; align-items: center; padding: 0; min-height: 64px; border-bottom: 1px solid var(--color-light-border, #3d444d); }
+.flex-list#issue-list > .flex-item:last-child { border-bottom: 0; border-radius: 0 0 6px 6px; }
+.flex-list#issue-list > .flex-item:hover { background: rgba(110,118,129,0.1); }
+.flex-list#issue-list > .flex-item > .flex-item-leading { align-self: flex-start; margin-top: 16px; margin-left: 16px; }
+.flex-list#issue-list > .flex-item > .flex-item-main { flex: 1; min-width: 0; padding: 8px 0 8px 12px; display: flex; flex-direction: column; gap: 2px; }
+.flex-list#issue-list > .flex-item > .flex-item-main .flex-item-header { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.flex-list#issue-list > .flex-item > .flex-item-main .flex-item-title a { font-weight: 600; font-size: 16px; color: var(--color-text); }
+.flex-list#issue-list > .flex-item > .flex-item-main .flex-item-title a:hover { color: var(--color-primary, #4493f8); }
+.flex-list#issue-list > .flex-item > .flex-item-main .flex-item-body { font-size: 12px; color: var(--color-text-light-1, #9198a1); }
+.flex-list#issue-list > .flex-item > .flex-item-trailing { display: flex; align-items: center; gap: 16px; margin-right: 32px; color: var(--color-text-light-1, #9198a1); }
+.flex-list#issue-list .flex-text-inline { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; }
+
+/* PR icon colors by state. The theme handles octicon colors but provide
+   fallbacks so the markup reads correctly without it. */
+.svg.octicon-git-pull-request.text.green { color: var(--color-green, #3fb950); }
+.svg.octicon-git-pull-request.text.purple { color: var(--color-purple, #a371f7); }
+.svg.octicon-git-pull-request.text.red { color: var(--color-red, #f85149); }
+.svg.octicon-git-pull-request.text.grey { color: var(--color-text-light-1, #9198a1); }
+.svg.octicon-git-pull-request-draft { color: var(--color-text-light-1, #9198a1); }
+
+/* Review approval badge */
+.review-badge { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 9999px; background: rgba(63,185,80,0.15); color: var(--color-green, #3fb950); font-size: 11px; font-weight: 500; }
+
+.page-footer { border-top: 1px solid var(--color-secondary, #30363d); padding: 24px 16px; display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-light-1, #9198a1); margin-top: 48px; }
+</style>
+</head>
+<body>
+<nav class="preview-nav">
+  <span class="label">Preview:</span>
+  <a href="index.html">index</a>
+  <a href="dashboard.html">dashboard</a>
+  <a href="explore.html">explore</a>
+  <a href="repo.html">repo</a>
+  <a href="commits.html">commits</a>
+  <a href="diff.html">diff</a>
+  <a href="issues.html">issues</a>
+  <a href="issue-detail.html">issue-detail</a>
+  <a href="pulls.html" class="active">pulls</a>
+  <a href="actions.html">actions</a>
+  <a href="releases.html">releases</a>
+  <a href="org.html">org</a>
+  <a href="settings.html">settings</a>
+  <a href="signin.html">signin</a>
+  <a href="markup.html">markup</a>
+</nav>
+
+<div class="full height">
+
+<nav id="navbar" aria-label="Navigation bar">
+  <div class="navbar-left ui secondary menu">
+    <a class="item" id="navbar-logo" href="/" aria-label="Dashboard">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path fill="#fd7e14" d="M11 3.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V8l4 2-4 2v4.5c0 .8-.7 1.5-1.5 1.5S11 17.3 11 16.5V13l-4-2 4-2zM21 15c0 2.5-2 4.5-4.5 4.5S12 17.5 12 15s2-4.5 4.5-4.5S21 12.5 21 15z"/></svg>
+    </a>
+    <a class="item" href="/issues">Issues</a>
+    <a class="item active" href="/pulls">Pull requests</a>
+    <a class="item" href="/milestones">Milestones</a>
+    <a class="item" href="/explore/repos">Explore</a>
+  </div>
+  <div class="navbar-right ui secondary menu">
+    <a class="item" href="/notifications" aria-label="Notifications">
+      <svg viewBox="0 0 16 16" class="svg octicon-bell" aria-hidden="true" width="16" height="16"><path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16M3 5a5 5 0 0 1 10 0v2.947q0 .076.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.26.26 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556-.003.01.001.006q0 .003.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007-.003-.01-1.703-2.554a1.75 1.75 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5"/></svg>
+    </a>
+    <div class="ui dropdown jump item" role="menu" aria-label="Create…" tabindex="0">
+      <span class="text">
+        <svg viewBox="0 0 16 16" class="svg octicon-plus" aria-hidden="true" width="16" height="16"><path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2"/></svg>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+    <div class="ui dropdown jump item" role="menu" aria-label="Profile and settings…" tabindex="0">
+      <span class="text tw-flex tw-items-center">
+        <span class="placeholder-avatar sm" title="Octo Demo">OD</span>
+        <svg viewBox="0 0 16 16" class="svg octicon-triangle-down" aria-hidden="true" width="16" height="16" style="margin-left:4px"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- Real Forgejo dashboard PR-list page-content.
+     Root class: .page-content.dashboard.issues (same as /issues, just filtered to PRs) -->
+<div role="main" aria-label="Pull requests" class="page-content dashboard issues">
+
+  <div class="secondary-nav tw-border-b tw-border-b-secondary">
+    <div class="ui secondary stackable menu">
+      <div class="item">
+        <div class="ui floating dropdown jump" role="menu" tabindex="0">
+          <span class="text truncated-item-container tw-flex tw-items-center tw-gap-2">
+            <span class="placeholder-avatar" title="Octo Demo">OD</span>
+            <span class="truncated-item-name">octo-demo</span>
+            <svg viewBox="0 0 16 16" class="dropdown icon svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui container">
+
+    <!-- Top filter bar — real selector: .list-header.
+         Theme strips the bordered panel framing in dashboard.ts so this reads
+         as a plain row with text tabs + filter dropdowns. -->
+    <div class="list-header">
+      <div class="switch list-header-toggle ui compact tiny menu">
+        <a class="item active" href="/pulls?state=open&type=created_by">
+          <svg viewBox="0 0 16 16" class="svg octicon-git-pull-request" aria-hidden="true" width="16" height="16"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25m5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354M3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0"/></svg>
+          <strong>3</strong> Open
+        </a>
+        <a class="item" href="/pulls?state=closed&type=created_by">
+          <svg viewBox="0 0 16 16" class="svg octicon-check" aria-hidden="true" width="16" height="16"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0"/></svg>
+          <strong>27</strong> Closed
+        </a>
+      </div>
+      <div class="list-header-filters ui compact tiny menu">
+        <div class="ui dropdown jump item" tabindex="0">
+          Type
+          <svg viewBox="0 0 16 16" class="dropdown icon svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+        </div>
+        <div class="ui dropdown jump item" tabindex="0">
+          Sort
+          <svg viewBox="0 0 16 16" class="dropdown icon svg octicon-triangle-down" aria-hidden="true" width="14" height="14"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PR list — same .flex-list#issue-list selector as the issues list. -->
+    <div class="flex-list" id="issue-list">
+
+      <!-- #12 octo-demo/hello-world — draft, 3 commits, 2 hours ago -->
+      <div class="flex-item">
+        <div class="flex-item-leading">
+          <svg viewBox="0 0 16 16" class="svg octicon-git-pull-request-draft" aria-hidden="true" width="16" height="16"><path d="M3.75 2.5a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5M2.5 3.75a1.25 1.25 0 1 1 2.5 0 1.25 1.25 0 0 1-2.5 0M3.75 12a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5M2.5 13.25a1.25 1.25 0 1 1 2.5 0 1.25 1.25 0 0 1-2.5 0M3.75 6a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 3.75 6m9.5 0a1.25 1.25 0 1 0 0 2.5 1.25 1.25 0 0 0 0-2.5M12 7.25a1.25 1.25 0 1 1 2.5 0 1.25 1.25 0 0 1-2.5 0"/></svg>
+        </div>
+        <div class="flex-item-main">
+          <div class="flex-item-header">
+            <span class="flex-item-title"><a href="/octo-demo/hello-world/pulls/12">Allow optional --silent flag</a></span>
+            <span class="ui label" style="background:transparent;border-color:var(--color-light-border,#3d444d);color:var(--color-text-light-1);font-size:11px;">Draft</span>
+          </div>
+          <div class="flex-item-body">
+            <a href="/octo-demo/hello-world">octo-demo/hello-world</a> #12 opened 2 hours ago by <a href="/octo-demo">octo-demo</a> · 3 commits
+          </div>
+        </div>
+        <div class="flex-item-trailing">
+          <a class="flex-text-inline" href="/octo-demo/hello-world/pulls/12">
+            <svg viewBox="0 0 16 16" class="svg octicon-comment" aria-hidden="true" width="16" height="16"><path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.189l2.72-2.72a.749.749 0 0 1 .53-.219h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
+            1
+          </a>
+        </div>
+      </div>
+
+      <!-- #11 octo-demo/hello-world — open + 1 review approval, 2 days ago, by bob -->
+      <div class="flex-item">
+        <div class="flex-item-leading">
+          <svg viewBox="0 0 16 16" class="svg octicon-git-pull-request text green" aria-hidden="true" width="16" height="16"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25m5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354M3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0"/></svg>
+        </div>
+        <div class="flex-item-main">
+          <div class="flex-item-header">
+            <span class="flex-item-title"><a href="/octo-demo/hello-world/pulls/11">Spanish translation files</a></span>
+            <span class="review-badge">
+              <svg viewBox="0 0 16 16" class="svg octicon-check" aria-hidden="true" width="12" height="12"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0"/></svg>
+              1 approval
+            </span>
+          </div>
+          <div class="flex-item-body">
+            <a href="/octo-demo/hello-world">octo-demo/hello-world</a> #11 opened 2 days ago by <a href="/bob">bob</a>
+          </div>
+        </div>
+        <div class="flex-item-trailing">
+          <span class="placeholder-avatar bob sm" title="bob">BO</span>
+          <a class="flex-text-inline" href="/octo-demo/hello-world/pulls/11">
+            <svg viewBox="0 0 16 16" class="svg octicon-comment" aria-hidden="true" width="16" height="16"><path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.189l2.72-2.72a.749.749 0 0 1 .53-.219h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
+            6
+          </a>
+        </div>
+      </div>
+
+      <!-- #17 acme-labs/widget-cli — merged, last week, by bob -->
+      <div class="flex-item">
+        <div class="flex-item-leading">
+          <svg viewBox="0 0 16 16" class="svg octicon-git-merge text purple" aria-hidden="true" width="16" height="16"><path d="M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.74 5.74 0 0 1 5 7.123v3.505a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218M4.25 13.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M5 3.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+        </div>
+        <div class="flex-item-main">
+          <div class="flex-item-header">
+            <span class="flex-item-title"><a href="/acme-labs/widget-cli/pulls/17">Use atty instead of isatty</a></span>
+            <span class="ui label" style="background:rgba(163,113,247,0.15);color:var(--color-purple,#a371f7);border-color:rgba(163,113,247,0.4);font-size:11px;">Merged</span>
+          </div>
+          <div class="flex-item-body">
+            <a href="/acme-labs/widget-cli">acme-labs/widget-cli</a> #17 by <a href="/bob">bob</a> was merged last week
+          </div>
+        </div>
+        <div class="flex-item-trailing">
+          <a class="flex-text-inline" href="/acme-labs/widget-cli/pulls/17">
+            <svg viewBox="0 0 16 16" class="svg octicon-comment" aria-hidden="true" width="16" height="16"><path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.189l2.72-2.72a.749.749 0 0 1 .53-.219h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
+            2
+          </a>
+        </div>
+      </div>
+
+      <!-- #9 octo-demo/hello-world — merged, 2 months ago, by octo-demo -->
+      <div class="flex-item">
+        <div class="flex-item-leading">
+          <svg viewBox="0 0 16 16" class="svg octicon-git-merge text purple" aria-hidden="true" width="16" height="16"><path d="M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.74 5.74 0 0 1 5 7.123v3.505a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218M4.25 13.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M5 3.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0"/></svg>
+        </div>
+        <div class="flex-item-main">
+          <div class="flex-item-header">
+            <span class="flex-item-title"><a href="/octo-demo/hello-world/pulls/9">Bump pyproject minimum python to 3.12</a></span>
+            <span class="ui label" style="background:rgba(163,113,247,0.15);color:var(--color-purple,#a371f7);border-color:rgba(163,113,247,0.4);font-size:11px;">Merged</span>
+          </div>
+          <div class="flex-item-body">
+            <a href="/octo-demo/hello-world">octo-demo/hello-world</a> #9 by <a href="/octo-demo">octo-demo</a> was merged 2 months ago
+          </div>
+        </div>
+        <div class="flex-item-trailing">
+          <!-- no comments -->
+        </div>
+      </div>
+
+      <!-- #38 octo-demo/hello-world — closed (rejected), 3 weeks ago, by alice -->
+      <div class="flex-item">
+        <div class="flex-item-leading">
+          <svg viewBox="0 0 16 16" class="svg octicon-git-pull-request-closed text red" aria-hidden="true" width="16" height="16"><path d="M10.72 1.227a.75.75 0 0 1 1.06 0l.97.97.97-.97a.749.749 0 0 1 1.275.326.75.75 0 0 1-.215.734l-.97.97.97.97a.749.749 0 0 1-.326 1.275.75.75 0 0 1-.734-.215l-.97-.97-.97.97a.749.749 0 0 1-1.275-.326.75.75 0 0 1 .215-.734l.97-.97-.97-.97a.75.75 0 0 1 0-1.06M12.75 7.25A.75.75 0 0 1 13.5 8v2.628a2.251 2.251 0 1 1-1.5 0V8a.75.75 0 0 1 .75-.75M2.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 2.5 3.25M3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m9.5 0a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5"/></svg>
+        </div>
+        <div class="flex-item-main">
+          <div class="flex-item-header">
+            <span class="flex-item-title"><a href="/octo-demo/hello-world/pulls/38">Add fixtures for empty-greeting case</a></span>
+            <span class="ui label" style="background:rgba(248,81,73,0.15);color:var(--color-red,#f85149);border-color:rgba(248,81,73,0.4);font-size:11px;">Closed</span>
+          </div>
+          <div class="flex-item-body">
+            <a href="/octo-demo/hello-world">octo-demo/hello-world</a> #38 by <a href="/alice">alice</a> was closed 3 weeks ago
+          </div>
+        </div>
+        <div class="flex-item-trailing">
+          <a class="flex-text-inline" href="/octo-demo/hello-world/pulls/38">
+            <svg viewBox="0 0 16 16" class="svg octicon-comment" aria-hidden="true" width="16" height="16"><path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.189l2.72-2.72a.749.749 0 0 1 .53-.219h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
+            4
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer" role="group" aria-label="Footer">
+  <div role="contentinfo">Page: <strong>4ms</strong> Template: <strong>1ms</strong></div>
+  <div>
+    <span class="muted"><svg viewBox="0 0 16 16" class="svg octicon-globe" aria-hidden="true" width="14" height="14"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0"/></svg> English</span>
+    <a href="#" style="margin-left:16px;">Licenses</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
