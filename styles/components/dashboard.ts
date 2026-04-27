@@ -92,18 +92,22 @@ export const dashboard = css`
 `;
 
 // 导航栏的工单/PR/里程碑仪表板
+// GitHub renders the filter row as a plain flex row (no panel bg/border) with
+// text-only Type/Sort dropdowns and a text-tab Open/Closed switch. Forgejo's
+// default makes .list-header into a bordered, filled panel-top connected to
+// the list below; strip that framing to match GitHub.
 export const dashboardIssues = css`
   .page-content.dashboard.issues {
-    .list-header {
-      background-color: ${themeVars.color.box.header};
-      border: 1px solid ${themeVars.color.light.border};
-      border-bottom: 0;
-      border-top-left-radius: ${otherThemeVars.border.radius};
-      border-top-right-radius: ${otherThemeVars.border.radius};
-      height: 54px;
-      padding: 16px 8px;
+    // top-level list header bar
+    > .ui.container > .list-header {
+      background-color: transparent;
+      border: 0;
+      border-radius: 0;
+      height: auto;
+      padding: 0 0 8px;
       .list-header-toggle {
         align-items: center;
+        background: transparent !important;
         border: 0;
         > .item {
           background: unset !important;
@@ -134,6 +138,10 @@ export const dashboardIssues = css`
           }
         }
       }
+    }
+    // now that the header no longer connects to the list, give the list full rounded corners
+    > .ui.container > #issue-list {
+      border-radius: ${otherThemeVars.border.radius};
     }
   }
 `;
