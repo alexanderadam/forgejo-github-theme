@@ -207,37 +207,56 @@ export const mobileList = css`
   }
 `;
 
-// Explore / org / user search bar — flatten the two-piece input+submit button so
-// it reads as a single GitHub-style search field. Forgejo's template is
-// <form#repo-search-form><.ui.small.fluid.action.input><input[type=search]><button></…>
-// so we can't merge them in markup; instead we collapse the button visually
-// into the input.
+// Explore / org / user search bar — match GitHub's split control exactly.
+// GitHub's repo-list filter (e.g. /orgs/n8n-io/repositories) is a 2-piece
+// composite: a left-rounded input with body-tone bg, joined to a 32×32
+// right-rounded square submit button with control-surface bg (slightly
+// lighter than body in dark mode). The two pieces share an overlapping
+// 1px border so they read as a 32px-tall pill with a subtle vertical seam
+// between text and icon.
+//
+// Forgejo emits the right markup naturally:
+//   .ui.action.input > input[type="search"] + button.ui.icon.button
+// so we just style each piece independently and rely on flex layout.
 export const searchBar = css`
   #repo-search-form .ui.action.input {
-    border: 1px solid ${themeVars.color.light.border};
-    border-radius: ${otherThemeVars.border.radius};
-    background: ${themeVars.color.input.background};
-    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+    height: 32px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
 
     > input[type="search"] {
-      border: none !important;
-      border-radius: 0 !important;
-      background: transparent !important;
+      // left half: rounded only on the left, body-toned bg, full border
+      // (border-right dropped so the seam is a single 1px line — the button's
+      // left border).
+      height: 32px;
+      padding: 0 12px;
+      background: ${themeVars.color.input.background} !important;
+      border: 1px solid ${themeVars.color.light.border} !important;
+      border-right: 0 !important;
+      border-radius: ${otherThemeVars.border.radius} 0 0 ${otherThemeVars.border.radius} !important;
       box-shadow: none !important;
       flex: 1;
     }
 
     > input[type="search"]:focus,
     > input[type="search"]:focus-visible {
-      background: transparent !important;
+      background: ${themeVars.color.input.background} !important;
       box-shadow: none !important;
     }
 
-    // flatten the submit button into the field
+    // right half: 32×32 square submit button, control-surface bg, rounded only on the right
     > button.ui.icon.button {
-      border: none !important;
-      border-radius: 0 !important;
-      background: transparent !important;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      flex: 0 0 32px;
+      background: ${themeVars.color.button} !important;
+      border: 1px solid ${themeVars.color.light.border} !important;
+      border-radius: 0 ${otherThemeVars.border.radius} ${otherThemeVars.border.radius} 0 !important;
       color: ${themeVars.color.text.light.num1};
 
       &:hover {
@@ -245,10 +264,13 @@ export const searchBar = css`
       }
     }
 
-    // single focus ring on the whole wrapper when the inner input is focused
-    &:focus-within {
-      border-color: ${themeVars.github.borderColor.accent.emphasis};
-      box-shadow: inset 0 0 0 1px ${themeVars.github.borderColor.accent.emphasis};
+    // focus ring spans both pieces when the input is focused
+    &:focus-within > input[type="search"] {
+      border-color: ${themeVars.github.borderColor.accent.emphasis} !important;
+      box-shadow: inset 0 0 0 1px ${themeVars.github.borderColor.accent.emphasis} !important;
+    }
+    &:focus-within > button.ui.icon.button {
+      border-color: ${themeVars.github.borderColor.accent.emphasis} !important;
     }
   }
 `;
