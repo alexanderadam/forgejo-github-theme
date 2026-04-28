@@ -229,22 +229,29 @@ export const searchBar = css`
     overflow: visible;
 
     > input[type="search"] {
-      // left half: rounded only on the left, body-toned bg, full border
-      // (border-right dropped so the seam is a single 1px line — the button's
-      // left border).
+      // left half: rounded only on the left, transparent bg so the body's
+      // canvas.default tone shows through (github does the same — its input
+      // uses bg=canvas.default, not canvas.muted, so the text area matches
+      // the page). Full border with border-right dropped so the seam is a
+      // single 1px line — the button's left border.
       height: 32px;
       padding: 0 12px;
-      background: ${themeVars.color.input.background} !important;
+      font-size: 14px;
+      background: transparent !important;
       border: 1px solid ${themeVars.color.light.border} !important;
       border-right: 0 !important;
       border-radius: ${otherThemeVars.border.radius} 0 0 ${otherThemeVars.border.radius} !important;
       box-shadow: none !important;
       flex: 1;
+
+      &::placeholder {
+        color: ${themeVars.color.text.light.num1};
+      }
     }
 
     > input[type="search"]:focus,
     > input[type="search"]:focus-visible {
-      background: ${themeVars.color.input.background} !important;
+      background: transparent !important;
       box-shadow: none !important;
     }
 
